@@ -1030,8 +1030,8 @@
         }
 
         /* ===== เส้นคาดทแยง 2 เส้น แบบหนา และยื่นเลยขอบภาพทั้งซ้าย/ขวา =====
-           กำหนดระยะยื่น 9 มม. ต่อด้าน และเส้นหนา 7 px (≈ 1.85 มม. เมื่อพิมพ์)
-           ทั้งหน้าเว็บ, PDF และ PNG/JPG ใช้ระยะเดียวกันโดยไม่คาดทับส่วนลายเซ็น */
+           ปรับความหนา 0.50–8.00 มม. และระยะยื่น 0–20 มม. ต่อด้านได้เอง
+           ทั้งหน้าเว็บ, PDF และ PNG/JPG ใช้การตั้งค่าเดียวกันโดยไม่คาดทับส่วนลายเซ็น */
         .copy-image-card {
             position: relative;
             isolation: isolate;
@@ -1041,8 +1041,8 @@
            และรักษาเส้นให้อยู่ในพื้นที่กระดาษ A4 */
         .sheet.copy-with-diagonals .copy-layout.copy-house,
         .sheet.copy-with-diagonals .copy-layout.copy-full {
-            padding-right: 9mm;
-            padding-left: 9mm;
+            padding-right: var(--copy-diagonal-overhang, 9mm);
+            padding-left: var(--copy-diagonal-overhang, 9mm);
         }
 
         .sheet.copy-with-diagonals .copy-image-card {
@@ -1054,8 +1054,8 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            left: -9mm;
-            width: calc(100% + 18mm);
+            left: calc(0mm - var(--copy-diagonal-overhang, 9mm));
+            width: calc(100% + var(--copy-diagonal-total-overhang, 18mm));
             height: 100%;
             pointer-events: none;
             overflow: visible;
@@ -1068,10 +1068,79 @@
 
         .copy-diagonal-lines line {
             stroke: rgba(54, 60, 72, 0.88);
-            stroke-width: 7px;
+            stroke-width: var(--copy-diagonal-width, 1.85mm);
             stroke-linecap: butt;
             vector-effect: non-scaling-stroke;
             fill: none;
+        }
+
+
+        /* ตัวปรับความหนาและระยะยื่นของเส้นคาดแบบสัมผัส/แป้นพิมพ์ */
+        .diagonal-size-panel {
+            padding: 14px 16px;
+            border: 1px solid #c7d9e7;
+            border-radius: 12px;
+            background: #f4f9ff;
+            display: grid;
+            gap: 13px;
+            margin-top: 12px;
+        }
+        .diagonal-size-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 110px;
+            column-gap: 12px;
+            row-gap: 6px;
+            align-items: center;
+        }
+        .diagonal-size-row > label {
+            grid-column: 1 / -1;
+            color: #143a63;
+            font-weight: 700;
+            font-size: calc(16px * var(--ui-font-scale, 1));
+        }
+        .diagonal-size-row input[type="range"] {
+            width: 100%;
+            min-width: 0;
+            height: 30px;
+            accent-color: #087e86;
+            cursor: pointer;
+        }
+        .diagonal-number-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .diagonal-number-wrap input[type="number"] {
+            width: 100%;
+            min-width: 0;
+            padding: 9px 6px;
+            border-radius: 8px;
+            border: 1px solid #94afc6;
+            background: #fff;
+            color: #143a63;
+            font-weight: 700;
+            font-size: calc(17px * var(--ui-font-scale, 1));
+            text-align: center;
+        }
+        .diagonal-number-wrap span {
+            font-size: calc(15px * var(--ui-font-scale, 1));
+            white-space: nowrap;
+        }
+        .diagonal-size-panel[data-disabled="true"] {
+            opacity: 0.60;
+        }
+        .diagonal-size-panel input:disabled {
+            cursor: not-allowed;
+        }
+        .diagonal-size-readout {
+            color: #1f567e;
+            font-size: calc(14px * var(--ui-font-scale, 1));
+        }
+        @media (max-width: 420px) {
+            .diagonal-size-row {
+                grid-template-columns: minmax(0, 1fr) 100px;
+                column-gap: 8px;
+            }
         }
 
         .export-image-btn {
@@ -1791,7 +1860,30 @@
                             <span class="position-switch-status" id="copyDiagonalsToggleText">ปิด</span>
                         </label>
                     </div>
-                    <p class="help-text">เมื่อเปิด จะมีเส้นคาดทแยงหนา 2 เส้น ยื่นเลยขอบภาพซ้ายและขวาด้านละประมาณ 9 มม. โดยไม่ทับส่วนลงชื่อ และปรากฏใน PDF, PNG และ JPG</p>
+                    <div class="diagonal-size-panel" id="diagonalSizePanel" data-disabled="true">
+                        <div class="diagonal-size-row">
+                            <label for="copyDiagonalWidthRange">ความหนาเส้น (0.50–8.00 มม.)</label>
+                            <input id="copyDiagonalWidthRange" type="range" min="0.5" max="8" step="0.05" value="1.85" disabled
+                                   aria-label="เลื่อนปรับความหนาของเส้นคาดทแยง หน่วยมิลลิเมตร">
+                            <div class="diagonal-number-wrap">
+                                <input id="copyDiagonalWidthInput" type="number" inputmode="decimal" min="0.5" max="8" step="0.05" value="1.85" disabled
+                                       aria-label="กรอกความหนาเส้นคาดทแยง หน่วยมิลลิเมตร">
+                                <span>มม.</span>
+                            </div>
+                        </div>
+                        <div class="diagonal-size-row">
+                            <label for="copyDiagonalOverhangRange">ระยะยื่นเลยภาพแต่ละด้าน (0–20 มม.)</label>
+                            <input id="copyDiagonalOverhangRange" type="range" min="0" max="20" step="1" value="9" disabled
+                                   aria-label="เลื่อนปรับระยะยื่นเลยขอบรูปซ้ายและขวา หน่วยมิลลิเมตร">
+                            <div class="diagonal-number-wrap">
+                                <input id="copyDiagonalOverhangInput" type="number" inputmode="numeric" min="0" max="20" step="1" value="9" disabled
+                                       aria-label="กรอกระยะยื่นเลยขอบรูปแต่ละด้าน หน่วยมิลลิเมตร">
+                                <span>มม.</span>
+                            </div>
+                        </div>
+                        <div class="diagonal-size-readout" id="diagonalSizeReadout" aria-live="polite">เส้นหนา 1.85 มม. • ยื่นข้างละ 9 มม.</div>
+                    </div>
+                    <p class="help-text">เปิดสวิตช์ก่อนจึงปรับขนาดได้ เลื่อนแถบหรือกรอกตัวเลขเพื่อตั้งความหนาและระยะยื่นทันที ทั้งตัวอย่าง A4 พิมพ์ PDF และบันทึก PNG/JPG โดยไม่ทับส่วนลงชื่อ</p>
                 </div>
                 <p class="help-text">เอกสารแสดงคำว่า “สำเนาถูกต้อง” พร้อมช่องลงลายมือชื่อ และแสดง (ชื่อ-นามสกุล) ใต้ลายเซ็น หากเปิดใช้งานตำแหน่งจะแสดงเพิ่มอีกบรรทัด</p>
                 <div class="field" id="fullPageOption" hidden>
@@ -1997,7 +2089,9 @@
                         <ol>
                             <li>ถ้าต้องการคาดเส้นบนสำเนา ให้เลือกโหมด <strong>สำเนาเอกสาร</strong> และเพิ่มรูปที่ต้องการ</li>
                             <li>เลื่อนลงส่วน <strong>2. ข้อความรับรองสำเนา</strong> แล้วเปิดสวิตช์ <strong>เส้นคาดทแยงมุม 2 เส้น</strong> — จะเห็นเส้นเฉียงหนา 2 เส้น ยื่นเลยขอบภาพทั้งซ้ายและขวาทันที</li>
-                            <li>หากไม่ต้องการเส้นคาด ให้ปิดสวิตช์ เส้นจะหายจากหน้าตัวอย่าง พิมพ์ PDF และรูปภาพที่บันทึก</li>
+                            <li>กำหนด <strong>ความหนาเส้น</strong> ได้ตั้งแต่ <strong>0.50–8.00 มม.</strong> โดยเลื่อนแถบหรือกรอกตัวเลขด้านขวา (ค่าเริ่มต้น 1.85 มม.)</li>
+                            <li>กำหนด <strong>ระยะยื่นเลยขอบรูปทั้งสองด้าน</strong> ตั้งแต่ <strong>0–20 มม. ต่อด้าน</strong> (ค่าเริ่มต้น 9 มม.) และตรวจผลในตัวอย่าง A4 ได้ทันที</li>
+                            <li>หากไม่ต้องการเส้นคาด ให้ปิดสวิตช์ เส้นจะหายจากหน้าตัวอย่าง พิมพ์ PDF และรูปภาพที่บันทึก แต่โปรแกรมยังเก็บตัวเลขที่ตั้งไว้</li>
                             <li>ตรวจเอกสารในตัวอย่าง A4 แล้วกด <strong>🖼️ บันทึก PNG</strong> สำหรับไฟล์คุณภาพสูงไม่สูญเสียรายละเอียด หรือ <strong>📸 บันทึก JPG</strong> สำหรับไฟล์ภาพที่มักมีขนาดเล็กกว่า</li>
                             <li>ระบบบันทึกทั้งหน้ากระดาษ A4 ขนาด <strong>2480 × 3508 พิกเซล</strong> (เทียบเท่าประมาณ 300 DPI) รวมภาพและข้อความทั้งหมด โดยไม่ต้องอัปโหลดไฟล์ไปยังเซิร์ฟเวอร์</li>
                             <li>ไฟล์ที่ได้อยู่ในโฟลเดอร์ดาวน์โหลดของเบราว์เซอร์ สามารถเปิดดูหรือส่งต่อได้ตามต้องการ</li>
@@ -2087,6 +2181,12 @@
             copyShowPosition: document.getElementById("copyShowPosition"),
             copyShowDiagonals: document.getElementById("copyShowDiagonals"),
             copyDiagonalsToggleText: document.getElementById("copyDiagonalsToggleText"),
+            diagonalSizePanel: document.getElementById("diagonalSizePanel"),
+            copyDiagonalWidthRange: document.getElementById("copyDiagonalWidthRange"),
+            copyDiagonalWidthInput: document.getElementById("copyDiagonalWidthInput"),
+            copyDiagonalOverhangRange: document.getElementById("copyDiagonalOverhangRange"),
+            copyDiagonalOverhangInput: document.getElementById("copyDiagonalOverhangInput"),
+            diagonalSizeReadout: document.getElementById("diagonalSizeReadout"),
             savePngBtn: document.getElementById("savePngBtn"),
             saveJpgBtn: document.getElementById("saveJpgBtn"),
             copyPositionToggleText: document.getElementById("copyPositionToggleText"),
@@ -2383,6 +2483,40 @@
             renderCopyPreview();
         }
 
+        // คุมขนาดเส้นทั้งบน SVG (หน้าจอ/พิมพ์) และ Canvas (PNG/JPG) จากค่าเดียวกัน
+        function clampDiagonalValue(value, min, max, step, fallback) {
+            const num = Number(value);
+            if (!Number.isFinite(num)) return fallback;
+            const clamped = Math.min(max, Math.max(min, num));
+            return Number((Math.round(clamped / step) * step).toFixed(2));
+        }
+
+        function setDiagonalSize(kind, value, preserveNumberInput = false) {
+            const isWidth = kind === "width";
+            const range = isWidth ? elements.copyDiagonalWidthRange : elements.copyDiagonalOverhangRange;
+            const field = isWidth ? elements.copyDiagonalWidthInput : elements.copyDiagonalOverhangInput;
+            const number = isWidth
+                ? clampDiagonalValue(value, 0.5, 8, 0.05, 1.85)
+                : clampDiagonalValue(value, 0, 20, 1, 9);
+            range.value = String(number);
+            if (!preserveNumberInput) field.value = String(number);
+            const widthMm = Number(elements.copyDiagonalWidthRange.value);
+            const overhangMm = Number(elements.copyDiagonalOverhangRange.value);
+            elements.sheet.style.setProperty("--copy-diagonal-width", `${widthMm}mm`);
+            elements.sheet.style.setProperty("--copy-diagonal-overhang", `${overhangMm}mm`);
+            elements.sheet.style.setProperty("--copy-diagonal-total-overhang", `${overhangMm * 2}mm`);
+            elements.diagonalSizeReadout.textContent = `เส้นหนา ${widthMm.toFixed(2)} มม. • ยื่นข้างละ ${overhangMm} มม.`;
+        }
+
+        function syncDiagonalSizeControls() {
+            const enabled = elements.copyShowDiagonals.checked;
+            elements.diagonalSizePanel.dataset.disabled = String(!enabled);
+            [elements.copyDiagonalWidthRange, elements.copyDiagonalWidthInput,
+             elements.copyDiagonalOverhangRange, elements.copyDiagonalOverhangInput].forEach(function(control) {
+                control.disabled = !enabled;
+            });
+        }
+
         function renderCopyPreview() {
             const info = COPY_TYPE_INFO[state.copyType];
             const isId = state.copyType === "id";
@@ -2439,6 +2573,7 @@
             const diagonalsOn = state.documentMode === "copy" && elements.copyShowDiagonals.checked;
             elements.sheet.classList.toggle("copy-with-diagonals", diagonalsOn);
             elements.copyDiagonalsToggleText.textContent = diagonalsOn ? "เปิด" : "ปิด";
+            syncDiagonalSizeControls();
 
             const count = state.copyImages.slice(0, isFull ? 1 : 2).filter(Boolean).length;
             elements.photoCount.textContent = state.documentMode === "copy"
@@ -2497,6 +2632,8 @@
             elements.copyPosition.value = "";
             elements.copyShowPosition.checked = false;
             elements.copyShowDiagonals.checked = false;
+            setDiagonalSize("width", 1.85);
+            setDiagonalSize("overhang", 9);
             syncCopyPositionOption();
             elements.copyMarginSelect.value = "binding";
             elements.fullPageModeSelect.value = "reserve";
@@ -2770,7 +2907,8 @@
                     ctx.rect(documentBox.x, documentBox.y, documentBox.w, documentBox.h);
                     ctx.clip();
                     ctx.strokeStyle = "rgba(54,60,72,0.88)";
-                    ctx.lineWidth = 7 * canvas.width / elements.sheet.offsetWidth;
+                    // 210 มม. คือความกว้างกระดาษ A4: หน่วยที่ใช้ตรงกันกับ CSS/พิมพ์
+                    ctx.lineWidth = Number(elements.copyDiagonalWidthRange.value) * canvas.width / 210;
                     ctx.lineCap = "butt";
                     for (const [startY, endY] of [[65, 23], [83, 41]]) {
                         ctx.beginPath();
@@ -2870,7 +3008,7 @@
 
                 const project = {
                     format: "four-photo-a4-project",
-                    version: 4,
+                    version: 5,
                     documentMode: state.documentMode,
                     copyType: state.copyType,
                     copyImages: copyImages,
@@ -2879,6 +3017,8 @@
                     copyPosition: elements.copyPosition.value,
                     copyShowPosition: elements.copyShowPosition.checked,
                     copyShowDiagonals: elements.copyShowDiagonals.checked,
+                    copyDiagonalWidthMm: Number(elements.copyDiagonalWidthRange.value),
+                    copyDiagonalOverhangMm: Number(elements.copyDiagonalOverhangRange.value),
                     copyMargin: elements.copyMarginSelect.value,
                     fullPageMode: elements.fullPageModeSelect.value,
                     selectedCount: state.selectedCount,
@@ -2956,6 +3096,9 @@
                 elements.copyPosition.value = String(project.copyPosition ?? "");
                 elements.copyShowPosition.checked = project.copyShowPosition === true;
                 elements.copyShowDiagonals.checked = project.copyShowDiagonals === true;
+                // งานรุ่นเดิมใช้ค่าเส้นหนา 1.85 มม. และยื่นด้านละ 9 มม. เป็นค่าเริ่มต้น
+                setDiagonalSize("width", project.copyDiagonalWidthMm ?? 1.85);
+                setDiagonalSize("overhang", project.copyDiagonalOverhangMm ?? 9);
                 syncCopyPositionOption();
                 elements.copyMarginSelect.value = project.copyMargin === "normal" ? "normal" : "binding";
                 elements.fullPageModeSelect.value = project.fullPageMode === "overlay" ? "overlay" : "reserve";
@@ -3159,6 +3302,24 @@
                 applyPaperSettings();
             });
             elements.copyShowDiagonals.addEventListener("change", applyPaperSettings);
+            // เมื่อเลื่อนแถบหรือแก้ตัวเลข อัปเดตเอกสารทันทีและเก็บลง JSON
+            [
+                ["width", elements.copyDiagonalWidthRange, elements.copyDiagonalWidthInput],
+                ["overhang", elements.copyDiagonalOverhangRange, elements.copyDiagonalOverhangInput]
+            ].forEach(function([kind, range, numberInput]) {
+                range.addEventListener("input", function() {
+                    setDiagonalSize(kind, range.value);
+                });
+                numberInput.addEventListener("input", function() {
+                    if (numberInput.value.trim() === "") return;
+                    const raw = Number(numberInput.value);
+                    if (!Number.isFinite(raw)) return;
+                    setDiagonalSize(kind, raw, true);
+                });
+                numberInput.addEventListener("change", function() {
+                    setDiagonalSize(kind, numberInput.value);
+                });
+            });
             elements.fullPageModeSelect.addEventListener("change", applyPaperSettings);
             elements.copyMarginSelect.addEventListener("change", applyPaperSettings);
             document.getElementById("copyResetBtn").addEventListener("click", resetCopyProject);
