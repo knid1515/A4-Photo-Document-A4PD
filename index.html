@@ -890,6 +890,94 @@
             overflow-wrap: anywhere;
         }
 
+        /* ตำแหน่งเป็นข้อมูลเสริม แสดงในเอกสารเฉพาะเมื่อเปิดใช้งาน */
+        .copy-signer-position {
+            width: 100%;
+            max-width: 100%;
+            margin-top: 1mm;
+            font-size: 14pt;
+            font-weight: 500;
+            line-height: 1.55;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        /* สวิตช์เปิด/ปิดตำแหน่ง: ใช้งานได้ทั้งเมาส์ คีย์บอร์ด และมือถือ */
+        .position-field-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .position-field-heading > label {
+            margin-bottom: 0;
+        }
+
+        .position-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .position-switch input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        .position-switch-track {
+            display: inline-flex;
+            align-items: center;
+            width: 52px;
+            height: 30px;
+            padding: 3px;
+            border-radius: 999px;
+            background: #aab8c7;
+            transition: background 0.18s ease;
+        }
+
+        .position-switch-track::before {
+            content: "";
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 1px 4px rgba(0,0,0,.18);
+            transition: transform 0.18s ease;
+        }
+
+        .position-switch input:checked + .position-switch-track {
+            background: #087e86;
+        }
+
+        .position-switch input:checked + .position-switch-track::before {
+            transform: translateX(22px);
+        }
+
+        .position-switch input:focus-visible + .position-switch-track {
+            outline: 3px solid #ffbf3c;
+            outline-offset: 3px;
+        }
+
+        .position-switch-status {
+            min-width: 42px;
+            font-size: calc(16px * var(--ui-font-scale, 1));
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .position-input:disabled {
+            background: #edf1f6;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
         .copy-signature-line {
             display: flex;
             align-items: flex-end;
@@ -1497,14 +1585,22 @@
                     <input class="text-input" id="copyPurposeInput" type="text" maxlength="180" value="ใช้สำหรับประกอบ" placeholder="เช่น ใช้สำหรับประกอบการสมัครงานเท่านั้น">
                 </div>
                 <div class="field">
-                    <label for="copyFirstName">ชื่อ</label>
-                    <input class="text-input" id="copyFirstName" type="text" maxlength="100" placeholder="กรอกชื่อผู้รับรองสำเนา">
+                    <label for="copyFullName">ชื่อ-นามสกุล</label>
+                    <input class="text-input" id="copyFullName" type="text" maxlength="180" placeholder="กรอกชื่อ-นามสกุลผู้รับรองสำเนา" autocomplete="name">
                 </div>
                 <div class="field">
-                    <label for="copyLastName">นามสกุล</label>
-                    <input class="text-input" id="copyLastName" type="text" maxlength="100" placeholder="กรอกนามสกุล">
+                    <div class="position-field-heading">
+                        <label for="copyPosition">ตำแหน่ง (ไม่บังคับ)</label>
+                        <label class="position-switch" for="copyShowPosition">
+                            <input type="checkbox" id="copyShowPosition" role="switch" aria-controls="copyPosition copySignerPosition" aria-label="เปิดหรือปิดการแสดงตำแหน่งในเอกสาร">
+                            <span class="position-switch-track" aria-hidden="true"></span>
+                            <span class="position-switch-status" id="copyPositionToggleText">ปิด</span>
+                        </label>
+                    </div>
+                    <input class="text-input position-input" id="copyPosition" type="text" maxlength="180" placeholder="เช่น ครูชำนาญการ / ผู้จัดการ" disabled>
+                    <p class="help-text" id="copyPositionHelp">เปิดสวิตช์เมื่อต้องการแสดงตำแหน่งใต้ชื่อในเอกสาร</p>
                 </div>
-                <p class="help-text">เอกสารแสดงคำว่า “สำเนาถูกต้อง” พร้อมช่องลงลายมือชื่อ และแสดงชื่อผู้รับรองในวงเล็บใต้ลายเซ็น โดยไม่มีบรรทัดสำหรับชื่อ–นามสกุล</p>
+                <p class="help-text">เอกสารแสดงคำว่า “สำเนาถูกต้อง” พร้อมช่องลงลายมือชื่อ และแสดง (ชื่อ-นามสกุล) ใต้ลายเซ็น หากเปิดใช้งานตำแหน่งจะแสดงเพิ่มอีกบรรทัด</p>
                 <div class="field" id="fullPageOption" hidden>
                     <label for="fullPageModeSelect">การวางภาพเอกสารเต็ม A4</label>
                     <select class="select-input" id="fullPageModeSelect">
@@ -1576,7 +1672,8 @@
                                         <span class="copy-signature-line" aria-label="ช่องลงลายมือชื่อ"></span>
                                         <span>ผู้รับรองสำเนา</span>
                                     </div>
-                                    <div class="copy-signer-parentheses" id="copySignerName">(ชื่อ–นามสกุล)</div>
+                                    <div class="copy-signer-parentheses" id="copySignerName">(ชื่อ-นามสกุล)</div>
+                                    <div class="copy-signer-position" id="copySignerPosition" hidden></div>
                                 </div>
                             </section>
 
@@ -1671,8 +1768,12 @@
             copyTypeSelect: document.getElementById("copyTypeSelect"),
             copyDocumentTitle: document.getElementById("copyDocumentTitle"),
             copyPurposeInput: document.getElementById("copyPurposeInput"),
-            copyFirstName: document.getElementById("copyFirstName"),
-            copyLastName: document.getElementById("copyLastName"),
+            copyFullName: document.getElementById("copyFullName"),
+            copyPosition: document.getElementById("copyPosition"),
+            copyShowPosition: document.getElementById("copyShowPosition"),
+            copyPositionToggleText: document.getElementById("copyPositionToggleText"),
+            copyPositionHelp: document.getElementById("copyPositionHelp"),
+            copySignerPosition: document.getElementById("copySignerPosition"),
             fullPageOption: document.getElementById("fullPageOption"),
             fullPageModeSelect: document.getElementById("fullPageModeSelect"),
             copyMarginSelect: document.getElementById("copyMarginSelect"),
@@ -1954,6 +2055,16 @@
             return state.copyType === "house" ? 2 : 1;
         }
 
+        function syncCopyPositionOption() {
+            const enabled = elements.copyShowPosition.checked;
+            elements.copyPosition.disabled = !enabled;
+            elements.copyPositionToggleText.textContent = enabled ? "เปิด" : "ปิด";
+            elements.copyPositionHelp.textContent = enabled
+                ? "กำลังแสดงตำแหน่งในเอกสาร สามารถแก้ไขข้อความได้"
+                : "เปิดสวิตช์เมื่อต้องการแสดงตำแหน่งใต้ชื่อในเอกสาร";
+            renderCopyPreview();
+        }
+
         function renderCopyPreview() {
             const info = COPY_TYPE_INFO[state.copyType];
             const isId = state.copyType === "id";
@@ -1997,10 +2108,14 @@
 
             // ข้อความรับรองใช้ textContent เพื่อแสดงผลอย่างปลอดภัย
             document.getElementById("copyPurposePrint").textContent = elements.copyPurposeInput.value.trim();
-            const fullName = [elements.copyFirstName.value.trim(), elements.copyLastName.value.trim()]
-                .filter(Boolean)
-                .join(" ");
-            document.getElementById("copySignerName").textContent = fullName ? `(${fullName})` : "(ชื่อ–นามสกุล)";
+            const fullName = elements.copyFullName.value.trim();
+            document.getElementById("copySignerName").textContent = fullName ? `(${fullName})` : "(ชื่อ-นามสกุล)";
+
+            // ปิดสวิตช์แล้วไม่แสดงตำแหน่งทั้งหน้าจอและเอกสาร PDF
+            const showPosition = elements.copyShowPosition.checked;
+            const position = elements.copyPosition.value.trim();
+            elements.copySignerPosition.textContent = position ? `ตำแหน่ง ${position}` : "ตำแหน่ง";
+            elements.copySignerPosition.hidden = !showPosition;
 
             const count = state.copyImages.slice(0, isFull ? 1 : 2).filter(Boolean).length;
             elements.photoCount.textContent = state.documentMode === "copy"
@@ -2055,8 +2170,10 @@
                 clearCopyImage(index);
             }
             elements.copyPurposeInput.value = "ใช้สำหรับประกอบ";
-            elements.copyFirstName.value = "";
-            elements.copyLastName.value = "";
+            elements.copyFullName.value = "";
+            elements.copyPosition.value = "";
+            elements.copyShowPosition.checked = false;
+            syncCopyPositionOption();
             elements.copyMarginSelect.value = "binding";
             elements.fullPageModeSelect.value = "reserve";
             setCopyType("id");
@@ -2179,13 +2296,14 @@
 
                 const project = {
                     format: "four-photo-a4-project",
-                    version: 3,
+                    version: 4,
                     documentMode: state.documentMode,
                     copyType: state.copyType,
                     copyImages: copyImages,
                     copyPurpose: elements.copyPurposeInput.value,
-                    copyFirstName: elements.copyFirstName.value,
-                    copyLastName: elements.copyLastName.value,
+                    copyFullName: elements.copyFullName.value,
+                    copyPosition: elements.copyPosition.value,
+                    copyShowPosition: elements.copyShowPosition.checked,
                     copyMargin: elements.copyMarginSelect.value,
                     fullPageMode: elements.fullPageModeSelect.value,
                     selectedCount: state.selectedCount,
@@ -2254,8 +2372,15 @@
                     }
                 }
                 elements.copyPurposeInput.value = String(project.copyPurpose ?? "ใช้สำหรับประกอบ");
-                elements.copyFirstName.value = String(project.copyFirstName ?? "");
-                elements.copyLastName.value = String(project.copyLastName ?? "");
+                // อ่านไฟล์งานรุ่น 1–3 ที่เคยแยกช่องชื่อและนามสกุลได้ด้วย
+                const oldFullName = [project.copyFirstName, project.copyLastName]
+                    .filter(value => value !== null && value !== undefined && String(value).trim())
+                    .map(value => String(value).trim())
+                    .join(" ");
+                elements.copyFullName.value = String(project.copyFullName ?? oldFullName);
+                elements.copyPosition.value = String(project.copyPosition ?? "");
+                elements.copyShowPosition.checked = project.copyShowPosition === true;
+                syncCopyPositionOption();
                 elements.copyMarginSelect.value = project.copyMargin === "normal" ? "normal" : "binding";
                 elements.fullPageModeSelect.value = project.fullPageMode === "overlay" ? "overlay" : "reserve";
                 setCopyType(project.copyType || "id");
@@ -2316,8 +2441,12 @@
             elements.copyTypeSelect.addEventListener("change", function () {
                 setCopyType(elements.copyTypeSelect.value);
             });
-            [elements.copyPurposeInput, elements.copyFirstName, elements.copyLastName].forEach(function (input) {
+            [elements.copyPurposeInput, elements.copyFullName, elements.copyPosition].forEach(function (input) {
                 input.addEventListener("input", applyPaperSettings);
+            });
+            elements.copyShowPosition.addEventListener("change", function () {
+                syncCopyPositionOption();
+                applyPaperSettings();
             });
             elements.fullPageModeSelect.addEventListener("change", applyPaperSettings);
             elements.copyMarginSelect.addEventListener("change", applyPaperSettings);
@@ -2500,6 +2629,7 @@
             setSelectedCount(4, false);
             bindEvents();
             setCopyType("id");
+            syncCopyPositionOption();
             setDocumentMode("photo");
             applyPaperSettings();
             updatePageScale();
