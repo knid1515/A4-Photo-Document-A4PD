@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ภาพปกโปรแกรม A4 Photo Document — กดเพื่อเข้าใช้งาน</title>
+    <meta name="description" content="คลิกภาพปกเพื่อเปิดโปรแกรมเอกสารประกอบรูปภาพ 4 ภาพ A4 Photo Document">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; display: grid; place-items: center;
+               padding: 22px; font-family: Tahoma, Arial, sans-serif;
+               background: linear-gradient(135deg,#dff3ff,#f7faff); color: #163960; }
+        main { width: min(780px, 100%); text-align: center; }
+        h1 { font-size: clamp(20px, 3vw, 28px); margin: 0 0 18px; }
+        .cover-link { display: block; position: relative; border-radius: 18px;
+                     overflow: hidden; box-shadow: 0 12px 40px rgba(0,45,100,.18);
+                     outline-offset: 5px; transition: transform .15s ease; }
+        .cover-link:hover, .cover-link:focus-visible { transform: translateY(-3px); }
+        .cover-link img { display: block; width: 100%; height: auto; }
+        .notice { font-size: 16px; margin: 16px 0 12px; }
+        .action { display: inline-block; text-decoration: none; color: white; background: #0967cc;
+                  font-weight: bold; border-radius: 12px; padding: 12px 26px; }
+        .action:hover { background: #0752a4; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>เอกสารประกอบรูปภาพ 4 ภาพ (A4 Photo Document)</h1>
+        <!-- คลิกพื้นที่ใด ๆ บนภาพ เพื่อเปิดเว็บไซต์โปรแกรม -->
+        <a class="cover-link" href="https://knid1515.github.io/A4-Photo-Document-A4PD/"
+           target="_blank" rel="noopener noreferrer" aria-label="คลิกภาพเพื่อเปิดโปรแกรม A4 Photo Document">
+            <img src="cover.png" alt="ภาพหน้าปกโปรแกรมเอกสารประกอบรูปภาพ 4 ภาพ" width="1312" height="1199">
+        </a>
+        <p class="notice">คลิกที่ภาพปกเพื่อเข้าใช้งานโปรแกรม</p>
+        <a class="action" href="https://knid1515.github.io/A4-Photo-Document-A4PD/"
+           target="_blank" rel="noopener noreferrer">เปิดโปรแกรม A4PD ↗</a>
+    </main>
+</body>
+</html>
