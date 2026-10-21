@@ -1029,20 +1029,36 @@
             }
         }
 
-        /* ===== เส้นคาดทแยง 2 เส้น เฉพาะภาพสำเนา ไม่บังข้อความรับรอง ===== */
+        /* ===== เส้นคาดทแยง 2 เส้น แบบหนา และยื่นเลยขอบภาพทั้งซ้าย/ขวา =====
+           กำหนดระยะยื่น 9 มม. ต่อด้าน และเส้นหนา 7 px (≈ 1.85 มม. เมื่อพิมพ์)
+           ทั้งหน้าเว็บ, PDF และ PNG/JPG ใช้ระยะเดียวกันโดยไม่คาดทับส่วนลายเซ็น */
         .copy-image-card {
             position: relative;
             isolation: isolate;
         }
 
+        /* โหมดทะเบียนบ้านและสำเนา A4 ต้องเผื่อที่ให้เส้นยื่นเลยภาพได้ทั้ง 2 ข้าง
+           และรักษาเส้นให้อยู่ในพื้นที่กระดาษ A4 */
+        .sheet.copy-with-diagonals .copy-layout.copy-house,
+        .sheet.copy-with-diagonals .copy-layout.copy-full {
+            padding-right: 9mm;
+            padding-left: 9mm;
+        }
+
+        .sheet.copy-with-diagonals .copy-image-card {
+            overflow: visible;
+        }
+
         .copy-diagonal-lines {
             display: none;
             position: absolute;
-            inset: 0;
-            width: 100%;
+            top: 0;
+            bottom: 0;
+            left: -9mm;
+            width: calc(100% + 18mm);
             height: 100%;
             pointer-events: none;
-            overflow: hidden;
+            overflow: visible;
             z-index: 3;
         }
 
@@ -1051,8 +1067,9 @@
         }
 
         .copy-diagonal-lines line {
-            stroke: rgba(65, 73, 84, 0.82);
-            stroke-width: 1.3;
+            stroke: rgba(54, 60, 72, 0.88);
+            stroke-width: 7px;
+            stroke-linecap: butt;
             vector-effect: non-scaling-stroke;
             fill: none;
         }
@@ -1774,7 +1791,7 @@
                             <span class="position-switch-status" id="copyDiagonalsToggleText">ปิด</span>
                         </label>
                     </div>
-                    <p class="help-text">เมื่อเปิด จะมีเส้นคาดเอียงขนานกัน 2 เส้นบนภาพสำเนาเท่านั้น ไม่คาดทับส่วนลงชื่อ และติดไปกับไฟล์ PDF, PNG และ JPG</p>
+                    <p class="help-text">เมื่อเปิด จะมีเส้นคาดทแยงหนา 2 เส้น ยื่นเลยขอบภาพซ้ายและขวาด้านละประมาณ 9 มม. โดยไม่ทับส่วนลงชื่อ และปรากฏใน PDF, PNG และ JPG</p>
                 </div>
                 <p class="help-text">เอกสารแสดงคำว่า “สำเนาถูกต้อง” พร้อมช่องลงลายมือชื่อ และแสดง (ชื่อ-นามสกุล) ใต้ลายเซ็น หากเปิดใช้งานตำแหน่งจะแสดงเพิ่มอีกบรรทัด</p>
                 <div class="field" id="fullPageOption" hidden>
@@ -1834,8 +1851,8 @@
                                         <svg class="copy-diagonal-lines" id="copyDiagonal0"
                                              viewBox="0 0 100 100" preserveAspectRatio="none"
                                              aria-hidden="true" focusable="false">
-                                            <line x1="2" y1="65" x2="98" y2="23"></line>
-                                            <line x1="2" y1="83" x2="98" y2="41"></line>
+                                            <line x1="0" y1="65" x2="100" y2="23"></line>
+                                            <line x1="0" y1="83" x2="100" y2="41"></line>
                                         </svg>
                                     </div>
                                     <div class="copy-image-card" id="copyCard1" hidden>
@@ -1847,8 +1864,8 @@
                                         <svg class="copy-diagonal-lines" id="copyDiagonal1"
                                              viewBox="0 0 100 100" preserveAspectRatio="none"
                                              aria-hidden="true" focusable="false">
-                                            <line x1="2" y1="65" x2="98" y2="23"></line>
-                                            <line x1="2" y1="83" x2="98" y2="41"></line>
+                                            <line x1="0" y1="65" x2="100" y2="23"></line>
+                                            <line x1="0" y1="83" x2="100" y2="41"></line>
                                         </svg>
                                     </div>
                                 </div>
@@ -1979,7 +1996,7 @@
                         <h3><span>17</span> เส้นคาดทแยง 2 เส้น และบันทึก PNG/JPG</h3>
                         <ol>
                             <li>ถ้าต้องการคาดเส้นบนสำเนา ให้เลือกโหมด <strong>สำเนาเอกสาร</strong> และเพิ่มรูปที่ต้องการ</li>
-                            <li>เลื่อนลงส่วน <strong>2. ข้อความรับรองสำเนา</strong> แล้วเปิดสวิตช์ <strong>เส้นคาดทแยงมุม 2 เส้น</strong> — จะเห็นเส้นเฉียงขนานกันบนภาพทันที</li>
+                            <li>เลื่อนลงส่วน <strong>2. ข้อความรับรองสำเนา</strong> แล้วเปิดสวิตช์ <strong>เส้นคาดทแยงมุม 2 เส้น</strong> — จะเห็นเส้นเฉียงหนา 2 เส้น ยื่นเลยขอบภาพทั้งซ้ายและขวาทันที</li>
                             <li>หากไม่ต้องการเส้นคาด ให้ปิดสวิตช์ เส้นจะหายจากหน้าตัวอย่าง พิมพ์ PDF และรูปภาพที่บันทึก</li>
                             <li>ตรวจเอกสารในตัวอย่าง A4 แล้วกด <strong>🖼️ บันทึก PNG</strong> สำหรับไฟล์คุณภาพสูงไม่สูญเสียรายละเอียด หรือ <strong>📸 บันทึก JPG</strong> สำหรับไฟล์ภาพที่มักมีขนาดเล็กกว่า</li>
                             <li>ระบบบันทึกทั้งหน้ากระดาษ A4 ขนาด <strong>2480 × 3508 พิกเซล</strong> (เทียบเท่าประมาณ 300 DPI) รวมภาพและข้อความทั้งหมด โดยไม่ต้องอัปโหลดไฟล์ไปยังเซิร์ฟเวอร์</li>
@@ -2739,20 +2756,26 @@
                 } else {
                     for (const child of el.childNodes) visit(child);
                 }
-                // เส้นตรงกันกับการแสดงผลบนหน้ากระดาษและ PDF
+                // วาดเส้นตามขอบเขต SVG จริง (รวมส่วนยื่น 9 มม. ทั้งซ้าย/ขวา)
+                // จึงได้ตำแหน่ง/ความหนาตรงกันกับหน้าตัวอย่างและงานพิมพ์ PDF
                 if (el.classList.contains("copy-image-card") &&
                     state.documentMode === "copy" && elements.copyShowDiagonals.checked &&
                     el.querySelector(".copy-image:not([hidden])")) {
+                    const diagonalSvg = el.querySelector(".copy-diagonal-lines");
+                    const lineBox = exportBounds(diagonalSvg, pageBounds, canvas);
+                    const documentBox = exportBounds(elements.copyDocument, pageBounds, canvas);
                     ctx.save();
+                    // คลิปเฉพาะพื้นที่เอกสาร ไม่คลิปที่ขอบภาพ เพื่อให้เส้นยื่นได้จริง
                     ctx.beginPath();
-                    ctx.rect(box.x, box.y, box.w, box.h);
+                    ctx.rect(documentBox.x, documentBox.y, documentBox.w, documentBox.h);
                     ctx.clip();
-                    ctx.strokeStyle = "rgba(65,73,84,0.82)";
-                    ctx.lineWidth = canvas.width / pageBounds.width * 1.3;
+                    ctx.strokeStyle = "rgba(54,60,72,0.88)";
+                    ctx.lineWidth = 7 * canvas.width / elements.sheet.offsetWidth;
+                    ctx.lineCap = "butt";
                     for (const [startY, endY] of [[65, 23], [83, 41]]) {
                         ctx.beginPath();
-                        ctx.moveTo(box.x + box.w * 0.02, box.y + box.h * startY / 100);
-                        ctx.lineTo(box.x + box.w * 0.98, box.y + box.h * endY / 100);
+                        ctx.moveTo(lineBox.x, lineBox.y + lineBox.h * startY / 100);
+                        ctx.lineTo(lineBox.x + lineBox.w, lineBox.y + lineBox.h * endY / 100);
                         ctx.stroke();
                     }
                     ctx.restore();
