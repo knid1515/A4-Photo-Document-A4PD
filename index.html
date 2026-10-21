@@ -1029,6 +1029,43 @@
             }
         }
 
+        /* ===== เส้นคาดทแยง 2 เส้น เฉพาะภาพสำเนา ไม่บังข้อความรับรอง ===== */
+        .copy-image-card {
+            position: relative;
+            isolation: isolate;
+        }
+
+        .copy-diagonal-lines {
+            display: none;
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 3;
+        }
+
+        .sheet.copy-with-diagonals .copy-image-card:has(.copy-image:not([hidden])) .copy-diagonal-lines {
+            display: block;
+        }
+
+        .copy-diagonal-lines line {
+            stroke: rgba(65, 73, 84, 0.82);
+            stroke-width: 1.3;
+            vector-effect: non-scaling-stroke;
+            fill: none;
+        }
+
+        .export-image-btn {
+            background: #e9fff5;
+            border-color: #9ae5c0;
+            color: #13563b;
+        }
+        .export-image-btn:hover { background: #d0fae7; }
+        .export-image-btn:disabled { cursor: wait; opacity: .65; }
+        .export-hint { margin: 10px 0 0; font-size: calc(14px * var(--ui-font-scale, 1)); color: #52647b; line-height: 1.6; }
+
         /* ===== ปรับความชัดและขนาดตัวอักษรบนหน้าจอ =====
            ปรับเฉพาะ UI: ขนาดพิมพ์ A4 และเนื้อหาใน .sheet คงเดิม */
         :root {
@@ -1581,6 +1618,12 @@
             <button type="button" class="btn btn-outline-light" id="loadProjectBtn">
                 📂 เปิดงานเดิม
             </button>
+            <button type="button" class="btn export-image-btn" id="savePngBtn" aria-label="บันทึกเอกสาร A4 เป็น PNG">
+                🖼️ บันทึก PNG
+            </button>
+            <button type="button" class="btn export-image-btn" id="saveJpgBtn" aria-label="บันทึกเอกสาร A4 เป็น JPG">
+                📸 บันทึก JPG
+            </button>
             <button type="button" class="btn btn-light" id="printBtn">
                 🖨️ พิมพ์ / บันทึก PDF
             </button>
@@ -1720,6 +1763,19 @@
                     <input class="text-input position-input" id="copyPosition" type="text" maxlength="180" placeholder="เช่น ครูชำนาญการ / ผู้จัดการ" disabled>
                     <p class="help-text" id="copyPositionHelp">เปิดสวิตช์เมื่อต้องการแสดงตำแหน่งใต้ชื่อในเอกสาร</p>
                 </div>
+                <div class="field">
+                    <div class="position-field-heading">
+                        <label for="copyShowDiagonals">เส้นคาดทแยงมุม 2 เส้น (ไม่บังคับ)</label>
+                        <label class="position-switch" for="copyShowDiagonals">
+                            <input type="checkbox" id="copyShowDiagonals" role="switch"
+                                   aria-controls="copyDiagonal0 copyDiagonal1"
+                                   aria-label="เปิดหรือปิดเส้นคาดทแยงมุม 2 เส้นบนภาพสำเนา">
+                            <span class="position-switch-track" aria-hidden="true"></span>
+                            <span class="position-switch-status" id="copyDiagonalsToggleText">ปิด</span>
+                        </label>
+                    </div>
+                    <p class="help-text">เมื่อเปิด จะมีเส้นคาดเอียงขนานกัน 2 เส้นบนภาพสำเนาเท่านั้น ไม่คาดทับส่วนลงชื่อ และติดไปกับไฟล์ PDF, PNG และ JPG</p>
+                </div>
                 <p class="help-text">เอกสารแสดงคำว่า “สำเนาถูกต้อง” พร้อมช่องลงลายมือชื่อ และแสดง (ชื่อ-นามสกุล) ใต้ลายเซ็น หากเปิดใช้งานตำแหน่งจะแสดงเพิ่มอีกบรรทัด</p>
                 <div class="field" id="fullPageOption" hidden>
                     <label for="fullPageModeSelect">การวางภาพเอกสารเต็ม A4</label>
@@ -1746,7 +1802,7 @@
                     <h2 id="previewHeading">ตัวอย่างก่อนพิมพ์</h2>
                     <div class="toolbar-details">
                         <span id="photoCount">0 / 4 ภาพ</span>
-                        <span>กระดาษ A4 • แนวตั้ง • 210 × 297 มม.</span>
+                        <span>กระดาษ A4 • แนวตั้ง • 210 × 297 มม. • ส่งออก PNG/JPG คุณภาพ 300 DPI</span>
                     </div>
                 </div>
                 <div class="preview-zoom-controls" role="group" aria-label="ปรับการขยายตัวอย่าง A4">
@@ -1775,6 +1831,12 @@
                                             <span style="font-size:26px" aria-hidden="true">▧</span>
                                             <span>คลิกเพื่อเพิ่มภาพ</span>
                                         </button>
+                                        <svg class="copy-diagonal-lines" id="copyDiagonal0"
+                                             viewBox="0 0 100 100" preserveAspectRatio="none"
+                                             aria-hidden="true" focusable="false">
+                                            <line x1="2" y1="65" x2="98" y2="23"></line>
+                                            <line x1="2" y1="83" x2="98" y2="41"></line>
+                                        </svg>
                                     </div>
                                     <div class="copy-image-card" id="copyCard1" hidden>
                                         <img class="copy-image" id="copyPreview1" alt="ภาพสำเนาที่ 2" hidden>
@@ -1782,6 +1844,12 @@
                                             <span style="font-size:26px" aria-hidden="true">▧</span>
                                             <span>คลิกเพื่อเพิ่มภาพ</span>
                                         </button>
+                                        <svg class="copy-diagonal-lines" id="copyDiagonal1"
+                                             viewBox="0 0 100 100" preserveAspectRatio="none"
+                                             aria-hidden="true" focusable="false">
+                                            <line x1="2" y1="65" x2="98" y2="23"></line>
+                                            <line x1="2" y1="83" x2="98" y2="41"></line>
+                                        </svg>
                                     </div>
                                 </div>
                                 <div class="copy-annotation" id="copyAnnotation">
@@ -1803,7 +1871,7 @@
             </div>
 
             <p class="bottom-hint" id="bottomHint">
-                ปรับผังภาพอัตโนมัติตามจำนวนที่เลือก (1–4 ภาพ) • เมื่อพิมพ์ให้เลือก A4 แนวตั้ง
+                ปรับผังภาพอัตโนมัติตามจำนวนที่เลือก (1–4 ภาพ) • บันทึก PNG/JPG หรือพิมพ์ A4 แนวตั้ง
                 และปิดส่วนหัว/ท้ายกระดาษของเบราว์เซอร์ หากต้องการ PDF ให้เลือก “Save as PDF”
             </p>
         </section>
@@ -1835,7 +1903,7 @@
                     <div>
                         <p class="manual-eyebrow">A4 PHOTO DOCUMENT · A4PD</p>
                         <h2 id="manualTitle">คู่มือการใช้งานโปรแกรมแบบละเอียด</h2>
-                        <p id="manualSummary">อธิบายทีละขั้นตอน ตั้งแต่เพิ่มรูปจนถึงพิมพ์หรือบันทึก PDF</p>
+                        <p id="manualSummary">อธิบายทีละขั้นตอน ตั้งแต่เพิ่มรูปจนถึง PDF / PNG / JPG</p>
                     </div>
                 </div>
                 <button type="button" class="manual-close" id="manualCloseBtn" aria-label="ปิดคู่มือการใช้งาน">✕ <span>ปิดคู่มือ</span></button>
@@ -1847,7 +1915,7 @@
             </div>
             <div class="manual-grid">
                 <nav class="manual-nav" id="manualNav" aria-label="สารบัญคู่มือ">
-                    <p class="manual-nav-caption">สารบัญ · 16 หัวข้อ</p>
+                    <p class="manual-nav-caption">สารบัญ · 17 หัวข้อ</p>
                     <button type="button" class="manual-nav-link" data-manual-target="manual-start" aria-label="หัวข้อ 1 เริ่มต้นใช้งาน"><span class="manual-nav-num">01</span><span>เริ่มต้นใช้งาน</span></button>
                     <button type="button" class="manual-nav-link" data-manual-target="manual-photo-count" aria-label="หัวข้อ 2 จัดรูปภาพ 1–4 ภาพ"><span class="manual-nav-num">02</span><span>จัดรูปภาพ 1–4 ภาพ</span></button>
                     <button type="button" class="manual-nav-link" data-manual-target="manual-photo-add" aria-label="หัวข้อ 3 เพิ่ม แก้ไข และลบรูปภาพ"><span class="manual-nav-num">03</span><span>เพิ่ม แก้ไข และลบรูปภาพ</span></button>
@@ -1864,12 +1932,13 @@
                     <button type="button" class="manual-nav-link" data-manual-target="manual-reset" aria-label="หัวข้อ 14 ล้างข้อมูลและเริ่มงานใหม่"><span class="manual-nav-num">14</span><span>ล้างข้อมูลและเริ่มงานใหม่</span></button>
                     <button type="button" class="manual-nav-link" data-manual-target="manual-problems" aria-label="หัวข้อ 15 ปัญหาที่พบบ่อยและวิธีแก้"><span class="manual-nav-num">15</span><span>ปัญหาที่พบบ่อยและวิธีแก้</span></button>
                     <button type="button" class="manual-nav-link" data-manual-target="manual-privacy" aria-label="หัวข้อ 16 การเก็บรักษาข้อมูลสำคัญ"><span class="manual-nav-num">16</span><span>การเก็บรักษาข้อมูลสำคัญ</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-diagonals-export" aria-label="หัวข้อ 17 เส้นคาดทแยงและบันทึก PNG JPG"><span class="manual-nav-num">17</span><span>เส้นคาดทแยง และ PNG/JPG</span></button>
                 </nav>
                 <div class="manual-content" id="manualContent" tabindex="0">
                     <div class="manual-intro">
                         <h3>ใช้งานครบทุกเมนูในไฟล์เดียว</h3>
                         <p>คู่มือนี้สามารถเปิดอ่านได้โดยไม่ต้องออกจากหน้าโปรแกรม เลือกหัวข้อทางซ้ายหรือค้นหาคำที่สนใจ และกดปุ่มกลับไปทำงานได้ทันที</p>
-                        <div class="manual-chips"><span>จัดรูป 1–4 ภาพ</span><span>สำเนาเอกสาร 3 แบบ</span><span>รับรองสำเนา</span><span>บันทึก JSON / PDF</span></div>
+                        <div class="manual-chips"><span>จัดรูป 1–4 ภาพ</span><span>สำเนาเอกสาร 3 แบบ</span><span>รับรองสำเนา</span><span>บันทึก JSON / PDF / PNG / JPG</span></div>
                     </div>
                     <p class="manual-search-status" id="manualSearchStatus" role="status" aria-live="polite" hidden></p>
                     <section class="manual-chapter" id="manual-start" data-manual-section tabindex="-1"><h3><span>01</span> เริ่มต้นใช้งาน</h3><p>โปรแกรม A4PD ทำเอกสาร A4 แนวตั้งได้ 2 ประเภท ได้แก่ <strong>เอกสารประกอบรูปภาพ</strong> (จัด 1–4 ภาพ) และ <strong>สำเนาเอกสาร</strong> (บัตรประชาชน ทะเบียนบ้าน หรือเอกสารเต็ม A4) โดยไม่ต้องติดตั้งโปรแกรมเพิ่มเติม</p>
@@ -1906,6 +1975,18 @@
 <dt>ตัวอักษรบนหน้าจอยังเล็ก</dt><dd>กด A+ บนแถบด้านบนเพื่อเพิ่มขนาดตัวอักษรของหน้าจอ โดยไม่เปลี่ยนการพิมพ์เอกสาร</dd>
 </dl></section>
                     <section class="manual-chapter" id="manual-privacy" data-manual-section tabindex="-1"><h3><span>16</span> การเก็บรักษาข้อมูลสำคัญ</h3><ol><li>รูปภาพถูกประมวลผลในเบราว์เซอร์บนอุปกรณ์ขณะใช้งาน ไม่ต้องสร้างบัญชีเข้าใช้โปรแกรม</li><li>หากเป็นสำเนาบัตรประชาชน ทะเบียนบ้าน หรือเอกสารที่มีข้อมูลส่วนตัว ให้ระมัดระวังการเปิดเผยข้อมูลในภาพ</li><li>ไฟล์ PDF และ JSON ที่บันทึกลงเครื่องอาจมีข้อมูลส่วนบุคคล ควรจัดเก็บในพื้นที่ที่มีสิทธิ์เข้าถึงเหมาะสม</li><li>ไม่ควรอัปโหลดเอกสารจริงที่มีข้อมูลส่วนบุคคลขึ้น GitHub Pages, Blogger หรือพื้นที่สาธารณะเพื่อใช้เป็นภาพตัวอย่าง</li><li>หลังใช้คอมพิวเตอร์สาธารณะ ควรตรวจสอบไฟล์ที่ดาวน์โหลดไว้และลบไฟล์ข้อมูลส่วนบุคคลตามความเหมาะสม</li></ol></section>
+                    <section class="manual-chapter" id="manual-diagonals-export" data-manual-section tabindex="-1">
+                        <h3><span>17</span> เส้นคาดทแยง 2 เส้น และบันทึก PNG/JPG</h3>
+                        <ol>
+                            <li>ถ้าต้องการคาดเส้นบนสำเนา ให้เลือกโหมด <strong>สำเนาเอกสาร</strong> และเพิ่มรูปที่ต้องการ</li>
+                            <li>เลื่อนลงส่วน <strong>2. ข้อความรับรองสำเนา</strong> แล้วเปิดสวิตช์ <strong>เส้นคาดทแยงมุม 2 เส้น</strong> — จะเห็นเส้นเฉียงขนานกันบนภาพทันที</li>
+                            <li>หากไม่ต้องการเส้นคาด ให้ปิดสวิตช์ เส้นจะหายจากหน้าตัวอย่าง พิมพ์ PDF และรูปภาพที่บันทึก</li>
+                            <li>ตรวจเอกสารในตัวอย่าง A4 แล้วกด <strong>🖼️ บันทึก PNG</strong> สำหรับไฟล์คุณภาพสูงไม่สูญเสียรายละเอียด หรือ <strong>📸 บันทึก JPG</strong> สำหรับไฟล์ภาพที่มักมีขนาดเล็กกว่า</li>
+                            <li>ระบบบันทึกทั้งหน้ากระดาษ A4 ขนาด <strong>2480 × 3508 พิกเซล</strong> (เทียบเท่าประมาณ 300 DPI) รวมภาพและข้อความทั้งหมด โดยไม่ต้องอัปโหลดไฟล์ไปยังเซิร์ฟเวอร์</li>
+                            <li>ไฟล์ที่ได้อยู่ในโฟลเดอร์ดาวน์โหลดของเบราว์เซอร์ สามารถเปิดดูหรือส่งต่อได้ตามต้องการ</li>
+                        </ol>
+                        <div class="manual-note manual-warning">ไฟล์ PNG และ JPG เป็นภาพสำเร็จรูป หากต้องการกลับมาแก้ไขรูปภาพ ชื่อ หรือสวิตช์ต่าง ๆ ให้บันทึกไฟล์งาน JSON แยกไว้ด้วย และก่อนนำสำเนาเอกสารไปใช้ให้ตรวจสอบข้อกำหนดของหน่วยงานผู้รับเอกสาร</div>
+                    </section>
                     <div class="manual-end">
                         <p>อ่านครบแล้ว สามารถกลับไปใช้งานโปรแกรมได้ทันที</p>
                         <button type="button" id="manualEndCloseBtn" class="manual-action-primary">✓ กลับไปหน้าโปรแกรม</button>
@@ -1987,6 +2068,10 @@
             copyFullName: document.getElementById("copyFullName"),
             copyPosition: document.getElementById("copyPosition"),
             copyShowPosition: document.getElementById("copyShowPosition"),
+            copyShowDiagonals: document.getElementById("copyShowDiagonals"),
+            copyDiagonalsToggleText: document.getElementById("copyDiagonalsToggleText"),
+            savePngBtn: document.getElementById("savePngBtn"),
+            saveJpgBtn: document.getElementById("saveJpgBtn"),
             copyPositionToggleText: document.getElementById("copyPositionToggleText"),
             copyPositionHelp: document.getElementById("copyPositionHelp"),
             copySignerPosition: document.getElementById("copySignerPosition"),
@@ -2333,6 +2418,11 @@
             elements.copySignerPosition.textContent = position ? `ตำแหน่ง ${position}` : "ตำแหน่ง";
             elements.copySignerPosition.hidden = !showPosition;
 
+            // เส้นคาดทแยงจะแสดงเฉพาะเมื่อเปิดสวิตช์และอยู่ในโหมดสำเนา
+            const diagonalsOn = state.documentMode === "copy" && elements.copyShowDiagonals.checked;
+            elements.sheet.classList.toggle("copy-with-diagonals", diagonalsOn);
+            elements.copyDiagonalsToggleText.textContent = diagonalsOn ? "เปิด" : "ปิด";
+
             const count = state.copyImages.slice(0, isFull ? 1 : 2).filter(Boolean).length;
             elements.photoCount.textContent = state.documentMode === "copy"
                 ? `${count} / ${getRequiredCopyCount()} ภาพที่ต้องใช้`
@@ -2389,6 +2479,7 @@
             elements.copyFullName.value = "";
             elements.copyPosition.value = "";
             elements.copyShowPosition.checked = false;
+            elements.copyShowDiagonals.checked = false;
             syncCopyPositionOption();
             elements.copyMarginSelect.value = "binding";
             elements.fullPageModeSelect.value = "reserve";
@@ -2475,6 +2566,250 @@
             }, 2000);
         }
 
+        /* ==============================================================
+         * ส่งออกภาพ A4 ผ่าน Canvas โดยตรง ไม่ใช้ CDN / ส่งไฟล์ขึ้นเซิร์ฟเวอร์
+         * 2480 x 3508 px เทียบเท่า A4 ประมาณ 300 DPI
+         * ============================================================= */
+        function exportBounds(element, pageBounds, canvas) {
+            const bounds = element.getBoundingClientRect();
+            return {
+                x: (bounds.left - pageBounds.left) / pageBounds.width * canvas.width,
+                y: (bounds.top - pageBounds.top) / pageBounds.height * canvas.height,
+                w: bounds.width / pageBounds.width * canvas.width,
+                h: bounds.height / pageBounds.height * canvas.height
+            };
+        }
+
+        function drawCanvasImage(ctx, img, bounds, fit) {
+            if (!img.complete || !img.naturalWidth || !img.naturalHeight) return;
+            const iw = img.naturalWidth;
+            const ih = img.naturalHeight;
+            const isCover = fit === "cover";
+            const ratio = isCover
+                ? Math.max(bounds.w / iw, bounds.h / ih)
+                : Math.min(bounds.w / iw, bounds.h / ih);
+            const width = iw * ratio;
+            const height = ih * ratio;
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(bounds.x, bounds.y, bounds.w, bounds.h);
+            ctx.clip();
+            ctx.drawImage(img, bounds.x + (bounds.w - width) / 2,
+                bounds.y + (bounds.h - height) / 2, width, height);
+            ctx.restore();
+        }
+
+        // อ่านตำแหน่งบรรทัดจาก DOM จริง เพื่อรักษาการตัดบรรทัดไทยและการจัดกึ่งกลาง
+        function drawCanvasText(ctx, textNode, pageBounds, canvas) {
+            const text = textNode.nodeValue || "";
+            if (!text.trim()) return;
+            const parent = textNode.parentElement;
+            if (!parent) return;
+            const style = getComputedStyle(parent);
+            const pageWidth = pageBounds.width;
+            const resolution = canvas.width / pageWidth;
+            const fontSize = parseFloat(style.fontSize) || 16;
+            const fontFamily = style.fontFamily || "Tahoma, sans-serif";
+            const fontWeight = style.fontWeight || "400";
+            const fontStyle = style.fontStyle || "normal";
+            const pieces = [];
+            if (typeof Intl !== "undefined" && Intl.Segmenter) {
+                const segmenter = new Intl.Segmenter("th", { granularity: "grapheme" });
+                for (const part of segmenter.segment(text)) {
+                    pieces.push({ text: part.segment, start: part.index,
+                        end: part.index + part.segment.length });
+                }
+            } else {
+                let pos = 0;
+                for (const part of Array.from(text)) {
+                    pieces.push({ text: part, start: pos, end: pos + part.length });
+                    pos += part.length;
+                }
+            }
+            const range = document.createRange();
+            const runs = [];
+            for (const piece of pieces) {
+                range.setStart(textNode, piece.start);
+                range.setEnd(textNode, piece.end);
+                const rect = range.getBoundingClientRect();
+                if (!rect.width && !rect.height) continue;
+                const last = runs[runs.length - 1];
+                if (last && Math.abs(last.top - rect.top) <= 2.5 &&
+                    rect.left + 2 >= last.left) {
+                    last.text += piece.text;
+                } else {
+                    runs.push({ top: rect.top, left: rect.left, height: rect.height,
+                        text: piece.text });
+                }
+            }
+            if (range.detach) range.detach();
+            ctx.save();
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+            ctx.font = `${fontStyle} ${fontWeight} ${fontSize * resolution}px ${fontFamily}`;
+            ctx.fillStyle = style.color || "#111827";
+            if ("letterSpacing" in ctx) {
+                ctx.letterSpacing = style.letterSpacing === "normal"
+                    ? "0px" : `${parseFloat(style.letterSpacing) * resolution || 0}px`;
+            }
+            for (const run of runs) {
+                const x = (run.left - pageBounds.left) * resolution;
+                const y = (run.top - pageBounds.top + run.height * 0.5) *
+                    canvas.height / pageBounds.height;
+                ctx.fillText(run.text, x, y);
+            }
+            ctx.restore();
+        }
+
+        function canvasFillAndBorders(ctx, el, bounds) {
+            const style = getComputedStyle(el);
+            const bg = style.backgroundColor;
+            if (bg && bg !== "transparent" && bg !== "rgba(0, 0, 0, 0)") {
+                ctx.fillStyle = bg;
+                ctx.fillRect(bounds.x, bounds.y, bounds.w, bounds.h);
+            }
+            const raw = el.getBoundingClientRect();
+            if (!raw.width || !raw.height) return;
+            const sx = bounds.w / raw.width;
+            const sy = bounds.h / raw.height;
+            const sides = [
+                ["Top", bounds.x, bounds.y, bounds.x + bounds.w, bounds.y, sy],
+                ["Right", bounds.x + bounds.w, bounds.y, bounds.x + bounds.w, bounds.y + bounds.h, sx],
+                ["Bottom", bounds.x, bounds.y + bounds.h, bounds.x + bounds.w, bounds.y + bounds.h, sy],
+                ["Left", bounds.x, bounds.y, bounds.x, bounds.y + bounds.h, sx]
+            ];
+            for (const side of sides) {
+                const [name, x1, y1, x2, y2, factor] = side;
+                const width = parseFloat(style[`border${name}Width`]) || 0;
+                const borderStyle = style[`border${name}Style`];
+                const color = style[`border${name}Color`];
+                if (width < 0.1 || borderStyle === "none" || borderStyle === "hidden" ||
+                    color === "transparent" || color === "rgba(0, 0, 0, 0)") continue;
+                ctx.save();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width * factor;
+                if (borderStyle === "dotted") {
+                    ctx.setLineDash([Math.max(ctx.lineWidth, 2), Math.max(ctx.lineWidth * 2.5, 3)]);
+                } else if (borderStyle === "dashed") {
+                    ctx.setLineDash([ctx.lineWidth * 4, ctx.lineWidth * 3]);
+                }
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        function renderA4ToCanvas() {
+            const canvas = document.createElement("canvas");
+            canvas.width = 2480;
+            canvas.height = 3508;
+            const ctx = canvas.getContext("2d", { alpha: false });
+            if (!ctx) throw new Error("เบราว์เซอร์นี้ไม่รองรับ Canvas");
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const pageBounds = elements.sheet.getBoundingClientRect();
+            if (!pageBounds.width || !pageBounds.height) {
+                throw new Error("ไม่สามารถอ่านขนาดเอกสาร A4 ได้");
+            }
+            const visit = function(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    drawCanvasText(ctx, node, pageBounds, canvas);
+                    return;
+                }
+                if (node.nodeType !== Node.ELEMENT_NODE) return;
+                const el = node;
+                if (el.hidden) return;
+                const css = getComputedStyle(el);
+                if (css.display === "none" || css.visibility === "hidden" || css.opacity === "0") return;
+                if (el.classList.contains("photo-placeholder") ||
+                    el.classList.contains("copy-image-empty") ||
+                    el.classList.contains("copy-diagonal-lines")) return;
+                const box = exportBounds(el, pageBounds, canvas);
+                if (box.w < 0.1 || box.h < 0.1) return;
+                ctx.save();
+                // ตัดขอบเอกสารภายนอก เพื่อไม่ให้สีหรือเส้นหลุดไปนอก A4
+                ctx.beginPath();
+                ctx.rect(0, 0, canvas.width, canvas.height);
+                ctx.clip();
+                canvasFillAndBorders(ctx, el, box);
+                if (el.tagName === "IMG") {
+                    drawCanvasImage(ctx, el, box, css.objectFit);
+                } else {
+                    for (const child of el.childNodes) visit(child);
+                }
+                // เส้นตรงกันกับการแสดงผลบนหน้ากระดาษและ PDF
+                if (el.classList.contains("copy-image-card") &&
+                    state.documentMode === "copy" && elements.copyShowDiagonals.checked &&
+                    el.querySelector(".copy-image:not([hidden])")) {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(box.x, box.y, box.w, box.h);
+                    ctx.clip();
+                    ctx.strokeStyle = "rgba(65,73,84,0.82)";
+                    ctx.lineWidth = canvas.width / pageBounds.width * 1.3;
+                    for (const [startY, endY] of [[65, 23], [83, 41]]) {
+                        ctx.beginPath();
+                        ctx.moveTo(box.x + box.w * 0.02, box.y + box.h * startY / 100);
+                        ctx.lineTo(box.x + box.w * 0.98, box.y + box.h * endY / 100);
+                        ctx.stroke();
+                    }
+                    ctx.restore();
+                }
+                ctx.restore();
+            };
+            visit(elements.sheet);
+            return canvas;
+        }
+
+        async function exportDocumentImage(format) {
+            const button = format === "png" ? elements.savePngBtn : elements.saveJpgBtn;
+            const originalLabel = button.textContent;
+            button.disabled = true;
+            button.textContent = "⏳ กำลังสร้างภาพ...";
+            try {
+                // ให้รูปภาพทุกรูปที่เลือกโหลดเสร็จก่อนเริ่มแปลง
+                const imgs = Array.from(elements.sheet.querySelectorAll("img:not([hidden])"));
+                await Promise.all(imgs.map(function(img) {
+                    if (img.complete && img.naturalWidth) return Promise.resolve();
+                    return new Promise(function(resolve, reject) {
+                        const timer = setTimeout(function() {
+                            reject(new Error("รอโหลดรูปภาพนานเกินไป"));
+                        }, 12000);
+                        img.addEventListener("load", function() {
+                            clearTimeout(timer); resolve();
+                        }, { once: true });
+                        img.addEventListener("error", function() {
+                            clearTimeout(timer); reject(new Error("โหลดรูปภาพไม่สำเร็จ"));
+                        }, { once: true });
+                    });
+                }));
+                if (document.fonts && document.fonts.ready) await document.fonts.ready;
+                const canvas = renderA4ToCanvas();
+                const mime = format === "png" ? "image/png" : "image/jpeg";
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, mime, 0.94));
+                if (!blob) throw new Error("ไม่สามารถสร้างไฟล์ภาพได้");
+                const objectUrl = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                const dateText = new Date().toISOString().slice(0, 10);
+                const descriptor = state.documentMode === "copy"
+                    ? `สำเนา-${state.copyType}` : `ภาพประกอบ-${state.selectedCount}ภาพ`;
+                link.download = `A4PD-${descriptor}-${dateText}.${format === "png" ? "png" : "jpg"}`;
+                link.href = objectUrl;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                setTimeout(() => URL.revokeObjectURL(objectUrl), 3000);
+                showToast(`บันทึก ${format === "png" ? "PNG" : "JPG"} ขนาด 2480 × 3508 พิกเซล เรียบร้อยแล้ว`);
+            } catch (error) {
+                showToast(`ไม่สามารถบันทึกภาพได้: ${error.message}`);
+            } finally {
+                button.disabled = false;
+                button.textContent = originalLabel;
+            }
+        }
+
         async function saveProject() {
             try {
                 const images = [];
@@ -2520,6 +2855,7 @@
                     copyFullName: elements.copyFullName.value,
                     copyPosition: elements.copyPosition.value,
                     copyShowPosition: elements.copyShowPosition.checked,
+                    copyShowDiagonals: elements.copyShowDiagonals.checked,
                     copyMargin: elements.copyMarginSelect.value,
                     fullPageMode: elements.fullPageModeSelect.value,
                     selectedCount: state.selectedCount,
@@ -2596,6 +2932,7 @@
                 elements.copyFullName.value = String(project.copyFullName ?? oldFullName);
                 elements.copyPosition.value = String(project.copyPosition ?? "");
                 elements.copyShowPosition.checked = project.copyShowPosition === true;
+                elements.copyShowDiagonals.checked = project.copyShowDiagonals === true;
                 syncCopyPositionOption();
                 elements.copyMarginSelect.value = project.copyMargin === "normal" ? "normal" : "binding";
                 elements.fullPageModeSelect.value = project.fullPageMode === "overlay" ? "overlay" : "reserve";
@@ -2798,6 +3135,7 @@
                 syncCopyPositionOption();
                 applyPaperSettings();
             });
+            elements.copyShowDiagonals.addEventListener("change", applyPaperSettings);
             elements.fullPageModeSelect.addEventListener("change", applyPaperSettings);
             elements.copyMarginSelect.addEventListener("change", applyPaperSettings);
             document.getElementById("copyResetBtn").addEventListener("click", resetCopyProject);
@@ -2915,6 +3253,13 @@
                 });
 
                 elements.batchImageInput.value = "";
+            });
+
+            elements.savePngBtn.addEventListener("click", function () {
+                exportDocumentImage("png");
+            });
+            elements.saveJpgBtn.addEventListener("click", function () {
+                exportDocumentImage("jpeg");
             });
 
             document.getElementById("printBtn").addEventListener("click", function () {
