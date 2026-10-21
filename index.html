@@ -941,6 +941,346 @@
             }
         }
 
+        /* ===== ปรับความชัดและขนาดตัวอักษรบนหน้าจอ =====
+           ปรับเฉพาะ UI: ขนาดพิมพ์ A4 และเนื้อหาใน .sheet คงเดิม */
+        :root {
+            --ui-font-scale: 1;
+        }
+
+        body {
+            font-size: calc(18px * var(--ui-font-scale));
+            line-height: 1.55;
+        }
+
+        .app-layout {
+            grid-template-columns: minmax(370px, calc(420px * var(--ui-font-scale))) minmax(0, 1fr);
+        }
+
+        .app-header {
+            gap: 17px;
+            padding: 20px 25px;
+        }
+
+        .brand h1 {
+            font-size: calc(24px * var(--ui-font-scale));
+            line-height: 1.4;
+        }
+
+        .brand p {
+            font-size: calc(15px * var(--ui-font-scale));
+            line-height: 1.65;
+        }
+
+        .btn {
+            min-height: 47px;
+            padding: 11px 14px;
+            font-size: calc(16px * var(--ui-font-scale));
+            line-height: 1.45;
+            white-space: normal;
+        }
+
+        .btn-sm {
+            min-height: 42px;
+            padding: 9px 12px;
+            font-size: calc(15px * var(--ui-font-scale));
+        }
+
+        .sidebar {
+            padding: 22px;
+        }
+
+        .panel {
+            padding: 20px;
+            margin-bottom: 19px;
+        }
+
+        .panel h2 {
+            font-size: calc(20px * var(--ui-font-scale));
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .field label,
+        .field-label {
+            font-size: calc(17px * var(--ui-font-scale));
+            margin-bottom: 8px;
+            line-height: 1.45;
+        }
+
+        .text-input,
+        .select-input {
+            min-height: 49px;
+            padding: 12px 13px;
+            font-size: calc(17px * var(--ui-font-scale));
+            line-height: 1.5;
+            border-color: #9caec4;
+        }
+
+        .text-input::placeholder {
+            color: #64748b;
+            opacity: 1;
+        }
+
+        .help-text,
+        .layout-description,
+        .copy-help {
+            font-size: calc(15px * var(--ui-font-scale));
+            line-height: 1.75;
+        }
+
+        .entry-heading,
+        .copy-entry-title {
+            font-size: calc(17px * var(--ui-font-scale));
+            line-height: 1.5;
+        }
+
+        .file-status,
+        .copy-entry-title small {
+            font-size: calc(14px * var(--ui-font-scale));
+        }
+
+        .checkbox-row {
+            gap: 11px;
+            font-size: calc(17px * var(--ui-font-scale));
+            line-height: 1.55;
+        }
+
+        .checkbox-row input {
+            width: 21px;
+            height: 21px;
+            flex: 0 0 21px;
+        }
+
+        .mode-button {
+            min-height: 67px;
+            padding: 11px 10px;
+            font-size: calc(16px * var(--ui-font-scale));
+            line-height: 1.4;
+        }
+
+        .mode-button.active {
+            padding: 10px 9px;
+        }
+
+        .number-chip {
+            font-size: calc(16px * var(--ui-font-scale));
+            min-width: 32px;
+            width: 32px;
+            height: 32px;
+        }
+
+        .image-entry,
+        .copy-entry {
+            padding: 14px;
+        }
+
+        .preview-toolbar {
+            max-width: none;
+            gap: 14px;
+        }
+
+        .preview-toolbar h2 {
+            font-size: calc(21px * var(--ui-font-scale));
+            line-height: 1.4;
+        }
+
+        .preview-heading-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .toolbar-details {
+            flex-wrap: wrap;
+            font-size: calc(15px * var(--ui-font-scale));
+            line-height: 1.5;
+        }
+
+        .preview-area {
+            display: block;
+            max-height: min(82vh, 1180px);
+            overflow: auto;
+            text-align: center;
+            scrollbar-color: #9caec4 #e5ebf2;
+        }
+
+        .preview-area #pageStage {
+            margin: 0 auto;
+        }
+
+        .bottom-hint {
+            font-size: calc(15px * var(--ui-font-scale));
+            line-height: 1.8;
+        }
+
+        .toast {
+            font-size: calc(16px * var(--ui-font-scale));
+            line-height: 1.6;
+        }
+
+        .footer-title {
+            font-size: calc(18px * var(--ui-font-scale));
+        }
+
+        .footer-description,
+        .footer-credit,
+        .footer-link {
+            font-size: calc(15px * var(--ui-font-scale));
+        }
+
+        .footer-link {
+            min-height: 44px;
+            padding: 9px 13px;
+        }
+
+        /* ปุ่ม A− / A+ ปรับเฉพาะตัวอักษร UI ไม่เปลี่ยนขนาดเอกสารพิมพ์ */
+        .text-size-tools {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid rgba(255,255,255,.45);
+            border-radius: 10px;
+            padding: 5px 7px 5px 11px;
+            color: white;
+        }
+
+        .text-size-label,
+        .text-size-value {
+            font-size: calc(14px * var(--ui-font-scale));
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .text-size-value {
+            min-width: 46px;
+            text-align: center;
+        }
+
+        .font-step-btn,
+        .zoom-btn,
+        .zoom-fit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 39px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .font-step-btn {
+            min-width: 40px;
+            border: none;
+            background: #fff;
+            color: var(--primary-dark);
+            font-size: calc(17px * var(--ui-font-scale));
+        }
+
+        .preview-zoom-controls {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 7px;
+            padding: 5px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: white;
+        }
+
+        .zoom-btn,
+        .zoom-fit-btn {
+            border: 1px solid #b8c7d8;
+            background: #f5f8fc;
+            color: var(--primary-dark);
+            font-size: calc(16px * var(--ui-font-scale));
+        }
+
+        .zoom-btn {
+            min-width: 41px;
+            font-size: calc(24px * var(--ui-font-scale));
+            line-height: 1;
+        }
+
+        .zoom-fit-btn {
+            padding: 0 11px;
+        }
+
+        .zoom-value {
+            min-width: 65px;
+            text-align: center;
+            color: var(--primary-dark);
+            font-size: calc(16px * var(--ui-font-scale));
+            font-weight: 700;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        select:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #ffbf3c;
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 1100px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                height: auto;
+                overflow: visible;
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .app-header {
+                padding: 17px 13px;
+            }
+
+            .brand h1 {
+                font-size: calc(21px * var(--ui-font-scale));
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions .btn {
+                flex: 1 1 150px;
+                font-size: calc(15px * var(--ui-font-scale));
+                padding: 10px;
+            }
+
+            .text-size-tools {
+                flex: 1 1 100%;
+                justify-content: center;
+            }
+
+            .sidebar {
+                padding: 14px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+
+            .workspace {
+                padding: 14px;
+            }
+
+            .preview-toolbar {
+                align-items: stretch;
+            }
+
+            .preview-zoom-controls {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         @page {
             size: A4 portrait;
             margin: 0;
@@ -1002,6 +1342,11 @@
             .photo-placeholder {
                 display: none !important;
             }
+
+            /* ซูมตัวอย่างและพื้นที่เลื่อนมีผลเฉพาะหน้าจอ ไม่กระทบการพิมพ์ */
+            .preview-area {
+                max-height: none !important;
+            }
         }
     </style>
 </head>
@@ -1016,6 +1361,12 @@
         </div>
 
         <div class="header-actions">
+            <div class="text-size-tools" role="group" aria-label="ปรับขนาดตัวอักษรบนหน้าจอ">
+                <span class="text-size-label">ขนาดตัวอักษร</span>
+                <button type="button" class="font-step-btn" id="uiFontDecreaseBtn" aria-label="ลดขนาดตัวอักษร">A−</button>
+                <span class="text-size-value" id="uiFontSizeValue" aria-live="polite">ปกติ</span>
+                <button type="button" class="font-step-btn" id="uiFontIncreaseBtn" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
+            </div>
             <button type="button" class="btn btn-outline-light" id="saveProjectBtn">
                 💾 บันทึกงาน
             </button>
@@ -1175,10 +1526,18 @@
 
         <section class="workspace" aria-label="ตัวอย่างหน้ากระดาษ A4">
             <div class="preview-toolbar">
-                <h2 id="previewHeading">ตัวอย่างก่อนพิมพ์</h2>
-                <div class="toolbar-details">
-                    <span id="photoCount">0 / 4 ภาพ</span>
-                    <span>กระดาษ A4 • แนวตั้ง • 210 × 297 มม.</span>
+                <div class="preview-heading-group">
+                    <h2 id="previewHeading">ตัวอย่างก่อนพิมพ์</h2>
+                    <div class="toolbar-details">
+                        <span id="photoCount">0 / 4 ภาพ</span>
+                        <span>กระดาษ A4 • แนวตั้ง • 210 × 297 มม.</span>
+                    </div>
+                </div>
+                <div class="preview-zoom-controls" role="group" aria-label="ปรับการขยายตัวอย่าง A4">
+                    <button type="button" class="zoom-btn" id="previewZoomOutBtn" aria-label="ย่อภาพตัวอย่าง">−</button>
+                    <output class="zoom-value" id="previewZoomValue" aria-live="polite">พอดีจอ</output>
+                    <button type="button" class="zoom-btn" id="previewZoomInBtn" aria-label="ขยายภาพตัวอย่าง">+</button>
+                    <button type="button" class="zoom-fit-btn" id="previewZoomFitBtn">พอดีจอ</button>
                 </div>
             </div>
 
@@ -1290,6 +1649,13 @@
             batchImageInput: document.getElementById("batchImageInput"),
             projectFileInput: document.getElementById("projectFileInput"),
             previewArea: document.getElementById("previewArea"),
+            uiFontDecreaseBtn: document.getElementById("uiFontDecreaseBtn"),
+            uiFontIncreaseBtn: document.getElementById("uiFontIncreaseBtn"),
+            uiFontSizeValue: document.getElementById("uiFontSizeValue"),
+            previewZoomOutBtn: document.getElementById("previewZoomOutBtn"),
+            previewZoomInBtn: document.getElementById("previewZoomInBtn"),
+            previewZoomFitBtn: document.getElementById("previewZoomFitBtn"),
+            previewZoomValue: document.getElementById("previewZoomValue"),
             pageStage: document.getElementById("pageStage"),
             pageScale: document.getElementById("pageScale"),
             toast: document.getElementById("toast"),
@@ -1315,6 +1681,30 @@
         };
 
         let toastTimer = null;
+        const UI_FONT_STEPS = [1, 1.12, 1.24, 1.36];
+        let uiFontStep = 0;
+        let previewManualScale = null; // null = พอดีกับพื้นที่แสดงผล
+        let currentPreviewScale = 1;
+
+        function setUIFontStep(nextStep) {
+            uiFontStep = Math.max(0, Math.min(UI_FONT_STEPS.length - 1, nextStep));
+            document.documentElement.style.setProperty("--ui-font-scale", String(UI_FONT_STEPS[uiFontStep]));
+            elements.uiFontSizeValue.textContent = uiFontStep === 0
+                ? "ปกติ" : `+${Math.round((UI_FONT_STEPS[uiFontStep] - 1) * 100)}%`;
+            elements.uiFontDecreaseBtn.disabled = uiFontStep === 0;
+            elements.uiFontIncreaseBtn.disabled = uiFontStep === UI_FONT_STEPS.length - 1;
+            try {
+                localStorage.setItem("a4pdUIFontStep", String(uiFontStep));
+            } catch (error) {
+                // อนุญาตให้ใช้งานได้แม้เบราว์เซอร์ปิดการบันทึกข้อมูล
+            }
+            updatePageScale();
+        }
+
+        function setPreviewZoom(scale) {
+            previewManualScale = scale;
+            updatePageScale();
+        }
 
         function showToast(message) {
             elements.toast.textContent = message;
@@ -1701,11 +2091,15 @@
             const sheetWidth = elements.sheet.offsetWidth;
             const sheetHeight = elements.sheet.offsetHeight;
             const usableWidth = Math.max(100, elements.previewArea.clientWidth - 28);
-            const scale = Math.min(1, usableWidth / sheetWidth);
+            const autoScale = Math.min(1, usableWidth / sheetWidth);
+            const scale = previewManualScale === null ? autoScale : previewManualScale;
 
+            currentPreviewScale = scale;
             elements.pageScale.style.transform = `scale(${scale})`;
             elements.pageStage.style.width = `${sheetWidth * scale}px`;
             elements.pageStage.style.height = `${sheetHeight * scale}px`;
+            elements.previewZoomValue.textContent = `${Math.round(scale * 100)}%`;
+            elements.previewZoomFitBtn.disabled = previewManualScale === null;
         }
 
         function readFileAsDataURL(file) {
@@ -1898,6 +2292,21 @@
         }
 
         function bindEvents() {
+            elements.uiFontDecreaseBtn.addEventListener("click", function () {
+                setUIFontStep(uiFontStep - 1);
+            });
+            elements.uiFontIncreaseBtn.addEventListener("click", function () {
+                setUIFontStep(uiFontStep + 1);
+            });
+            elements.previewZoomOutBtn.addEventListener("click", function () {
+                setPreviewZoom(Math.max(0.35, Math.round((currentPreviewScale - 0.1) * 100) / 100));
+            });
+            elements.previewZoomInBtn.addEventListener("click", function () {
+                setPreviewZoom(Math.min(1.5, Math.round((currentPreviewScale + 0.1) * 100) / 100));
+            });
+            elements.previewZoomFitBtn.addEventListener("click", function () {
+                setPreviewZoom(null);
+            });
             elements.modePhotoBtn.addEventListener("click", function () {
                 setDocumentMode("photo");
             });
@@ -2080,6 +2489,13 @@
 
         function init() {
             document.getElementById("footerYear").textContent = String(new Date().getFullYear() + 543);
+            let savedFontStep = 0;
+            try {
+                savedFontStep = Number(localStorage.getItem("a4pdUIFontStep")) || 0;
+            } catch (error) {
+                savedFontStep = 0;
+            }
+            setUIFontStep(savedFontStep);
             createImageControls();
             setSelectedCount(4, false);
             bindEvents();
