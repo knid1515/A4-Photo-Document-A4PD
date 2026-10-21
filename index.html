@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>โปรแกรมเอกสารประกอบรูปภาพ 4 ภาพ - A4</title>
+    <style>
+        :root {
+            --primary: #17416d;
+            --primary-dark: #102d4d;
+            --teal: #087e86;
+            --light-bg: #f3f6fa;
+            --border: #dce4ed;
+            --text: #1e293b;
+            --muted: #64748b;
+            --page-left-margin: 18mm;
+            --page-right-margin: 12mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--light-bg);
+            color: var(--text);
+            font-family: "Sarabun", "TH Sarabun New", Tahoma, Arial, sans-serif;
+            font-size: 15px;
+        }
+
+        button, input, select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 17px 26px;
+            color: white;
+            background: linear-gradient(110deg, var(--primary-dark), var(--primary), var(--teal));
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.14);
+            font-size: 25px;
+        }
+
+        .brand h1 {
+            margin: 0 0 3px;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .brand p {
+            margin: 0;
+            font-size: 12px;
+            color: #d7e6f4;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 39px;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            padding: 9px 13px;
+            font-weight: 600;
+            line-height: 1.3;
+            text-decoration: none;
+            transition: background-color 0.15s, transform 0.15s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: #087e86;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #086c72;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.48);
+            color: white;
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .btn-outline {
+            border-color: var(--border);
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-danger {
+            border-color: #f8caca;
+            color: #a12727;
+            background: #fff7f7;
+        }
+
+        .btn-sm {
+            min-height: 33px;
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: minmax(290px, 350px) minmax(0, 1fr);
+            min-height: calc(100vh - 84px);
+            align-items: start;
+        }
+
+        .sidebar {
+            background: white;
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            height: calc(100vh - 84px);
+            overflow-y: auto;
+        }
+
+        .panel {
+            margin-bottom: 17px;
+            padding: 17px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: white;
+        }
+
+        .panel h2 {
+            margin: 0 0 13px;
+            font-size: 16px;
+            color: var(--primary-dark);
+        }
+
+        .field {
+            margin-bottom: 13px;
+        }
+
+        .field:last-child {
+            margin-bottom: 0;
+        }
+
+        .field label,
+        .field-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .text-input,
+        .select-input {
+            display: block;
+            width: 100%;
+            min-height: 40px;
+            padding: 9px 11px;
+            color: var(--text);
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            outline: none;
+        }
+
+        .text-input:focus,
+        .select-input:focus {
+            border-color: #1387a0;
+            box-shadow: 0 0 0 3px rgba(19, 135, 160, 0.13);
+        }
+
+        .help-text {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.65;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .image-entry {
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fafcff;
+        }
+
+        .entry-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .number-chip {
+            display: inline-grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            color: var(--primary);
+            background: #e6f0f9;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .file-status {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            color: var(--muted);
+            text-align: right;
+            font-size: 11px;
+        }
+
+        .entry-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .entry-actions .btn:first-child {
+            flex: 1;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        .checkbox-row input {
+            width: 16px;
+            height: 16px;
+            accent-color: #087e86;
+        }
+
+        .workspace {
+            min-width: 0;
+            padding: 22px;
+        }
+
+        .preview-toolbar {
+            max-width: 910px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .preview-toolbar h2 {
+            margin: 0;
+            font-size: 17px;
+            color: var(--primary-dark);
+        }
+
+        .toolbar-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .preview-area {
+            display: flex;
+            justify-content: center;
+            min-width: 0;
+            padding: 25px 14px;
+            border-radius: 16px;
+            background: #e5ebf2;
+            overflow: hidden;
+        }
+
+        #pageStage {
+            position: relative;
+            margin: 0 auto;
+        }
+
+        #pageScale {
+            transform-origin: top left;
+        }
+
+        /* ขนาดหน้ากระดาษจริง 210 × 297 มม. */
+        .sheet {
+            display: flex;
+            flex-direction: column;
+            width: 210mm;
+            height: 297mm;
+            overflow: hidden;
+            padding: 12mm var(--page-right-margin) 12mm var(--page-left-margin);
+            background: #fff;
+            color: #111827;
+            box-shadow: 0 12px 32px rgba(16, 45, 77, 0.18);
+            font-family: "TH Sarabun New", "Sarabun", Tahoma, sans-serif;
+        }
+
+        .sheet-heading {
+            display: flex;
+            flex: 0 0 30mm;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 0;
+            overflow: hidden;
+            padding-bottom: 3mm;
+            border-bottom: 0.55mm solid #294f78;
+            text-align: center;
+        }
+
+        .sheet-title {
+            max-width: 100%;
+            margin: 0;
+            font-size: 22pt;
+            font-weight: 700;
+            line-height: 1.18;
+            overflow-wrap: anywhere;
+        }
+
+        .sheet-subtitle {
+            max-width: 100%;
+            margin: 2mm 0 0;
+            font-size: 12.5pt;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: repeat(2, minmax(0, 1fr));
+            gap: 5mm;
+            flex: 1 1 auto;
+            min-height: 0;
+            margin-top: 5mm;
+        }
+
+        .photo-card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            padding: 2.3mm;
+            border: 0.3mm solid #9ca3af;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .sheet.no-borders .photo-card {
+            border-color: transparent;
+        }
+
+        .photo-frame {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .photo-frame.drag-over {
+            outline: 3px dashed var(--teal);
+            outline-offset: -4px;
+            background: #e2f5f5;
+        }
+
+        .photo-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sheet.fit-cover .photo-image {
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            border: 1px dashed #a9b8c9;
+            border-radius: 5px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .placeholder-icon {
+            font-size: 35px;
+            line-height: 1;
+        }
+
+        .photo-caption {
+            display: flex;
+            flex: 0 0 11mm;
+            justify-content: center;
+            align-items: center;
+            min-width: 0;
+            overflow: hidden;
+            padding: 1mm 0 0;
+            color: #111827;
+            text-align: center;
+            font-size: 13pt;
+            font-weight: 700;
+            line-height: 1.12;
+            overflow-wrap: anywhere;
+        }
+
+        .sheet.hide-captions .photo-caption {
+            display: none;
+        }
+
+        .bottom-hint {
+            max-width: 920px;
+            margin: 14px auto 0;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .toast {
+            position: fixed;
+            z-index: 100;
+            right: 20px;
+            bottom: 20px;
+            max-width: min(400px, calc(100vw - 40px));
+            padding: 12px 16px;
+            border-radius: 11px;
+            background: #17314e;
+            color: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+            font-size: 13px;
+        }
+
+        .toast[hidden],
+        [hidden] {
+            display: none !important;
+        }
+
+        @media (max-width: 980px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                height: auto;
+                overflow: visible;
+                border-right: 0;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .workspace {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .app-header {
+                padding: 15px;
+            }
+
+            .brand h1 {
+                font-size: 17px;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+                font-size: 12px;
+                padding: 9px 7px;
+            }
+
+            .sidebar {
+                padding: 14px;
+            }
+
+            .preview-area {
+                padding: 12px 5px;
+            }
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        @media print {
+            html,
+            body {
+                width: 210mm !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .app-header,
+            .sidebar,
+            .preview-toolbar,
+            .bottom-hint,
+            .toast {
+                display: none !important;
+            }
+
+            .app-layout,
+            .workspace,
+            .preview-area,
+            #pageStage,
+            #pageScale {
+                display: block !important;
+                width: 210mm !important;
+                height: 297mm !important;
+                max-width: none !important;
+                min-height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
+                border: 0 !important;
+                border-radius: 0 !important;
+                background: white !important;
+            }
+
+            #pageScale {
+                transform: none !important;
+            }
+
+            .sheet {
+                width: 210mm !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            .photo-placeholder {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon" aria-hidden="true">▦</div>
+            <div>
+                <h1>โปรแกรมเอกสารประกอบรูปภาพ</h1>
+                <p>4 ภาพในกระดาษ A4 แนวตั้ง • ใช้ไฟล์เดียว • ไม่ต้องติดตั้ง</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button type="button" class="btn btn-outline-light" id="saveProjectBtn">
+                💾 บันทึกงาน
+            </button>
+            <button type="button" class="btn btn-outline-light" id="loadProjectBtn">
+                📂 เปิดงานเดิม
+            </button>
+            <button type="button" class="btn btn-light" id="printBtn">
+                🖨️ พิมพ์ / บันทึก PDF
+            </button>
+        </div>
+    </header>
+
+    <main class="app-layout">
+        <aside class="sidebar">
+            <section class="panel">
+                <h2>1. ข้อมูลหัวกระดาษ</h2>
+                <div class="field">
+                    <label for="titleInput">หัวเรื่องเอกสาร</label>
+                    <input class="text-input" id="titleInput" type="text" value="เอกสารประกอบ" maxlength="100">
+                </div>
+                <div class="field">
+                    <label for="subtitleInput">ข้อความใต้หัวเรื่อง</label>
+                    <input class="text-input" id="subtitleInput" type="text" value="รูปภาพประกอบ จำนวน 4 ภาพ" maxlength="150">
+                </div>
+            </section>
+
+            <section class="panel">
+                <h2>2. เพิ่มรูปภาพทั้ง 4 ช่อง</h2>
+                <label class="btn btn-primary full-width" for="batchImageInput">
+                    ＋ เลือกรูปภาพพร้อมกัน (สูงสุด 4 ภาพ)
+                </label>
+                <input class="file-input" id="batchImageInput" type="file" accept="image/*" multiple>
+                <p class="help-text">เลือกรูปทีละภาพหรือครั้งละ 4 ภาพก็ได้ โดยสามารถลากรูปมาวางบนช่องในหน้ากระดาษ</p>
+                <div id="imageEntries"></div>
+            </section>
+
+            <section class="panel">
+                <h2>3. ตั้งค่ารูปแบบเอกสาร</h2>
+                <div class="field">
+                    <label for="fitSelect">การแสดงรูปภาพ</label>
+                    <select class="select-input" id="fitSelect">
+                        <option value="contain">แสดงภาพเต็ม ไม่ตัดส่วนใดออก</option>
+                        <option value="cover">เต็มกรอบ (อาจตัดขอบภาพ)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="marginSelect">ระยะขอบกระดาษ</label>
+                    <select class="select-input" id="marginSelect">
+                        <option value="binding">เว้นขอบซ้ายสำหรับเย็บ (18 มม.)</option>
+                        <option value="normal">ระยะขอบเท่ากัน (12 มม.)</option>
+                    </select>
+                </div>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="captionToggle" checked>
+                    แสดงคำบรรยายใต้รูป
+                </label>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="borderToggle" checked>
+                    แสดงกรอบรอบรูป
+                </label>
+                <button type="button" class="btn btn-danger full-width" id="resetBtn">
+                    ↺ ล้างข้อมูลเริ่มใหม่
+                </button>
+            </section>
+            <p class="help-text">ข้อมูลและรูปภาพประมวลผลบนอุปกรณ์ของคุณ ไม่มีการอัปโหลดไปยังเซิร์ฟเวอร์ หากต้องการเปิดแก้ไขภายหลัง ให้กด “บันทึกงาน”</p>
+        </aside>
+
+        <section class="workspace" aria-label="ตัวอย่างหน้ากระดาษ A4">
+            <div class="preview-toolbar">
+                <h2>ตัวอย่างก่อนพิมพ์</h2>
+                <div class="toolbar-details">
+                    <span id="photoCount">0 / 4 ภาพ</span>
+                    <span>กระดาษ A4 • แนวตั้ง • 210 × 297 มม.</span>
+                </div>
+            </div>
+
+            <div class="preview-area" id="previewArea">
+                <div id="pageStage">
+                    <div id="pageScale">
+                        <article class="sheet" id="sheet">
+                            <header class="sheet-heading">
+                                <h2 class="sheet-title" id="paperTitle">เอกสารประกอบ</h2>
+                                <p class="sheet-subtitle" id="paperSubtitle">รูปภาพประกอบ จำนวน 4 ภาพ</p>
+                            </header>
+                            <div class="photo-grid" id="photoGrid"></div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+
+            <p class="bottom-hint">
+                รูปทั้ง 4 ใช้กรอบขนาดเท่ากันเสมอ (2 × 2) • เมื่อพิมพ์ให้เลือก A4 แนวตั้ง
+                และปิดส่วนหัว/ท้ายกระดาษของเบราว์เซอร์ หากต้องการ PDF ให้เลือก “Save as PDF”
+            </p>
+        </section>
+    </main>
+
+    <input class="file-input" id="projectFileInput" type="file" accept=".json,application/json">
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <script>
+        "use strict";
+
+        const IMAGE_COUNT = 4;
+        const DEFAULT_CAPTIONS = ["ภาพที่ 1", "ภาพที่ 2", "ภาพที่ 3", "ภาพที่ 4"];
+
+        const state = {
+            images: [null, null, null, null],
+            captions: [...DEFAULT_CAPTIONS]
+        };
+
+        const elements = {
+            sheet: document.getElementById("sheet"),
+            photoGrid: document.getElementById("photoGrid"),
+            imageEntries: document.getElementById("imageEntries"),
+            photoCount: document.getElementById("photoCount"),
+            titleInput: document.getElementById("titleInput"),
+            subtitleInput: document.getElementById("subtitleInput"),
+            paperTitle: document.getElementById("paperTitle"),
+            paperSubtitle: document.getElementById("paperSubtitle"),
+            fitSelect: document.getElementById("fitSelect"),
+            marginSelect: document.getElementById("marginSelect"),
+            captionToggle: document.getElementById("captionToggle"),
+            borderToggle: document.getElementById("borderToggle"),
+            batchImageInput: document.getElementById("batchImageInput"),
+            projectFileInput: document.getElementById("projectFileInput"),
+            previewArea: document.getElementById("previewArea"),
+            pageStage: document.getElementById("pageStage"),
+            pageScale: document.getElementById("pageScale"),
+            toast: document.getElementById("toast")
+        };
+
+        let toastTimer = null;
+
+        function showToast(message) {
+            elements.toast.textContent = message;
+            elements.toast.hidden = false;
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function () {
+                elements.toast.hidden = true;
+            }, 3600);
+        }
+
+        function createImageControls() {
+            for (let index = 0; index < IMAGE_COUNT; index++) {
+                const number = index + 1;
+
+                const item = document.createElement("div");
+                item.className = "image-entry";
+                item.innerHTML = `
+                    <div class="entry-heading">
+                        <span class="number-chip">${number}</span>
+                        <strong>รูปที่ ${number}</strong>
+                        <span class="file-status" id="imageStatus${index}">ยังไม่มีภาพ</span>
+                    </div>
+                    <div class="entry-actions">
+                        <label class="btn btn-outline btn-sm" for="fileInput${index}">
+                            📷 เลือกรูป
+                        </label>
+                        <input class="file-input" id="fileInput${index}"
+                               type="file" accept="image/*" data-image-input="${index}">
+                        <button type="button" class="btn btn-danger btn-sm"
+                                data-remove-image="${index}">ลบรูป</button>
+                    </div>
+                    <label class="field-label" for="captionInput${index}">คำบรรยายรูปที่ ${number}</label>
+                    <input class="text-input" id="captionInput${index}"
+                           data-caption-input="${index}" maxlength="100"
+                           value="ภาพที่ ${number}">
+                `;
+                elements.imageEntries.appendChild(item);
+
+                const card = document.createElement("div");
+                card.className = "photo-card";
+                card.innerHTML = `
+                    <div class="photo-frame" data-photo-frame="${index}">
+                        <img class="photo-image" id="photoImage${index}"
+                             alt="ภาพประกอบที่ ${number}" hidden>
+                        <button type="button" class="photo-placeholder"
+                                id="photoPlaceholder${index}"
+                                data-pick-image="${index}">
+                            <span class="placeholder-icon" aria-hidden="true">▧</span>
+                            <strong>คลิกเพื่อเพิ่มภาพที่ ${number}</strong>
+                            <span>หรือลากรูปมาวาง</span>
+                        </button>
+                    </div>
+                    <div class="photo-caption" id="paperCaption${index}">ภาพที่ ${number}</div>
+                `;
+                elements.photoGrid.appendChild(card);
+            }
+        }
+
+        function releaseImage(index) {
+            const oldImage = state.images[index];
+            if (oldImage && oldImage.objectUrl) {
+                URL.revokeObjectURL(oldImage.objectUrl);
+            }
+            state.images[index] = null;
+        }
+
+        function isImageFile(file) {
+            return file && typeof file.type === "string" && file.type.startsWith("image/");
+        }
+
+        function setImageFromFile(index, file) {
+            if (!isImageFile(file)) {
+                showToast("กรุณาเลือกไฟล์รูปภาพ เช่น JPG, PNG หรือ WebP");
+                return;
+            }
+
+            releaseImage(index);
+
+            const objectUrl = URL.createObjectURL(file);
+            state.images[index] = {
+                name: file.name,
+                file: file,
+                src: objectUrl,
+                objectUrl: objectUrl
+            };
+
+            renderImage(index);
+        }
+
+        function setImageFromData(index, source, name) {
+            if (typeof source !== "string" || !/^data:image\/(jpeg|png|webp|gif|bmp);base64,/i.test(source)) {
+                return false;
+            }
+
+            releaseImage(index);
+            state.images[index] = {
+                name: typeof name === "string" ? name : `รูปที่ ${index + 1}`,
+                file: null,
+                src: source,
+                objectUrl: null
+            };
+
+            renderImage(index);
+            return true;
+        }
+
+        function renderImage(index) {
+            const image = state.images[index];
+            const preview = document.getElementById(`photoImage${index}`);
+            const placeholder = document.getElementById(`photoPlaceholder${index}`);
+            const status = document.getElementById(`imageStatus${index}`);
+
+            if (image) {
+                preview.src = image.src;
+                preview.hidden = false;
+                placeholder.hidden = true;
+                status.textContent = image.name;
+                status.title = image.name;
+            } else {
+                preview.removeAttribute("src");
+                preview.hidden = true;
+                placeholder.hidden = false;
+                status.textContent = "ยังไม่มีภาพ";
+                status.removeAttribute("title");
+            }
+
+            const count = state.images.filter(Boolean).length;
+            elements.photoCount.textContent = `${count} / 4 ภาพ`;
+        }
+
+        function clearImage(index) {
+            releaseImage(index);
+            renderImage(index);
+
+            const fileInput = document.getElementById(`fileInput${index}`);
+            fileInput.value = "";
+        }
+
+        function openImagePicker(index) {
+            document.getElementById(`fileInput${index}`).click();
+        }
+
+        function applyPaperSettings() {
+            elements.paperTitle.textContent = elements.titleInput.value.trim();
+            elements.paperSubtitle.textContent = elements.subtitleInput.value.trim();
+            elements.sheet.classList.toggle("fit-cover", elements.fitSelect.value === "cover");
+            elements.sheet.classList.toggle("hide-captions", !elements.captionToggle.checked);
+            elements.sheet.classList.toggle("no-borders", !elements.borderToggle.checked);
+
+            const leftMargin = elements.marginSelect.value === "normal" ? "12mm" : "18mm";
+            elements.sheet.style.setProperty("--page-left-margin", leftMargin);
+
+            for (let index = 0; index < IMAGE_COUNT; index++) {
+                document.getElementById(`paperCaption${index}`).textContent = state.captions[index];
+            }
+        }
+
+        function updatePageScale() {
+            const sheetWidth = elements.sheet.offsetWidth;
+            const sheetHeight = elements.sheet.offsetHeight;
+            const usableWidth = Math.max(100, elements.previewArea.clientWidth - 28);
+            const scale = Math.min(1, usableWidth / sheetWidth);
+
+            elements.pageScale.style.transform = `scale(${scale})`;
+            elements.pageStage.style.width = `${sheetWidth * scale}px`;
+            elements.pageStage.style.height = `${sheetHeight * scale}px`;
+        }
+
+        function readFileAsDataURL(file) {
+            return new Promise(function (resolve, reject) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    resolve(reader.result);
+                };
+                reader.onerror = function () {
+                    reject(new Error("ไม่สามารถอ่านไฟล์รูปภาพได้"));
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function readFileAsText(file) {
+            return new Promise(function (resolve, reject) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    resolve(String(reader.result));
+                };
+                reader.onerror = function () {
+                    reject(new Error("ไม่สามารถอ่านไฟล์โครงการได้"));
+                };
+                reader.readAsText(file, "UTF-8");
+            });
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const objectUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = objectUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(function () {
+                URL.revokeObjectURL(objectUrl);
+            }, 2000);
+        }
+
+        async function saveProject() {
+            try {
+                const images = [];
+
+                for (let index = 0; index < IMAGE_COUNT; index++) {
+                    const image = state.images[index];
+
+                    if (!image) {
+                        images.push(null);
+                        continue;
+                    }
+
+                    const source = image.file
+                        ? await readFileAsDataURL(image.file)
+                        : image.src;
+
+                    images.push({
+                        name: image.name,
+                        src: source
+                    });
+                }
+
+                const project = {
+                    format: "four-photo-a4-project",
+                    version: 1,
+                    title: elements.titleInput.value,
+                    subtitle: elements.subtitleInput.value,
+                    captions: [...state.captions],
+                    fit: elements.fitSelect.value,
+                    margin: elements.marginSelect.value,
+                    showCaptions: elements.captionToggle.checked,
+                    showBorders: elements.borderToggle.checked,
+                    images: images
+                };
+
+                const dateText = new Date().toISOString().slice(0, 10);
+                const json = JSON.stringify(project, null, 2);
+                downloadFile(json, `เอกสารประกอบ-4ภาพ-${dateText}.json`, "application/json;charset=utf-8");
+                showToast("บันทึกไฟล์งานเรียบร้อย สามารถนำกลับมาเปิดแก้ไขได้");
+            } catch (error) {
+                showToast(`บันทึกงานไม่สำเร็จ: ${error.message}`);
+            }
+        }
+
+        async function loadProject(file) {
+            try {
+                const text = await readFileAsText(file);
+                const project = JSON.parse(text);
+
+                if (project.format !== "four-photo-a4-project" ||
+                    !Array.isArray(project.images) ||
+                    project.images.length !== IMAGE_COUNT) {
+                    throw new Error("รูปแบบไฟล์งานไม่ถูกต้อง");
+                }
+
+                elements.titleInput.value = String(project.title || "");
+                elements.subtitleInput.value = String(project.subtitle || "");
+                elements.fitSelect.value = project.fit === "cover" ? "cover" : "contain";
+                elements.marginSelect.value = project.margin === "normal" ? "normal" : "binding";
+                elements.captionToggle.checked = project.showCaptions !== false;
+                elements.borderToggle.checked = project.showBorders !== false;
+
+                for (let index = 0; index < IMAGE_COUNT; index++) {
+                    clearImage(index);
+
+                    state.captions[index] = Array.isArray(project.captions)
+                        ? String(project.captions[index] ?? DEFAULT_CAPTIONS[index])
+                        : DEFAULT_CAPTIONS[index];
+
+                    document.getElementById(`captionInput${index}`).value = state.captions[index];
+
+                    const image = project.images[index];
+                    if (image && image.src) {
+                        setImageFromData(index, image.src, image.name);
+                    }
+                }
+
+                applyPaperSettings();
+                showToast("เปิดไฟล์งานเรียบร้อยแล้ว");
+            } catch (error) {
+                showToast(`เปิดไฟล์ไม่สำเร็จ: ${error.message}`);
+            }
+        }
+
+        function resetProject() {
+            if (!confirm("ต้องการล้างรูปภาพและข้อความทั้งหมด เพื่อเริ่มงานใหม่ใช่หรือไม่?")) {
+                return;
+            }
+
+            elements.titleInput.value = "เอกสารประกอบ";
+            elements.subtitleInput.value = "รูปภาพประกอบ จำนวน 4 ภาพ";
+            elements.fitSelect.value = "contain";
+            elements.marginSelect.value = "binding";
+            elements.captionToggle.checked = true;
+            elements.borderToggle.checked = true;
+
+            for (let index = 0; index < IMAGE_COUNT; index++) {
+                clearImage(index);
+                state.captions[index] = DEFAULT_CAPTIONS[index];
+                document.getElementById(`captionInput${index}`).value = state.captions[index];
+            }
+
+            elements.batchImageInput.value = "";
+            applyPaperSettings();
+            showToast("เริ่มเอกสารใหม่แล้ว");
+        }
+
+        function bindEvents() {
+            elements.titleInput.addEventListener("input", applyPaperSettings);
+            elements.subtitleInput.addEventListener("input", applyPaperSettings);
+            elements.fitSelect.addEventListener("change", applyPaperSettings);
+            elements.marginSelect.addEventListener("change", applyPaperSettings);
+            elements.captionToggle.addEventListener("change", applyPaperSettings);
+            elements.borderToggle.addEventListener("change", applyPaperSettings);
+
+            elements.imageEntries.addEventListener("input", function (event) {
+                const input = event.target.closest("[data-caption-input]");
+                if (!input) {
+                    return;
+                }
+
+                const index = Number(input.dataset.captionInput);
+                state.captions[index] = input.value;
+                applyPaperSettings();
+            });
+
+            elements.imageEntries.addEventListener("change", function (event) {
+                const input = event.target.closest("[data-image-input]");
+                if (!input || !input.files || !input.files[0]) {
+                    return;
+                }
+
+                const index = Number(input.dataset.imageInput);
+                setImageFromFile(index, input.files[0]);
+            });
+
+            elements.imageEntries.addEventListener("click", function (event) {
+                const button = event.target.closest("[data-remove-image]");
+                if (button) {
+                    clearImage(Number(button.dataset.removeImage));
+                }
+            });
+
+            elements.photoGrid.addEventListener("click", function (event) {
+                const button = event.target.closest("[data-pick-image]");
+                if (button) {
+                    openImagePicker(Number(button.dataset.pickImage));
+                }
+            });
+
+            elements.photoGrid.addEventListener("dragover", function (event) {
+                const frame = event.target.closest("[data-photo-frame]");
+                if (!frame) {
+                    return;
+                }
+
+                event.preventDefault();
+                frame.classList.add("drag-over");
+            });
+
+            elements.photoGrid.addEventListener("dragleave", function (event) {
+                const frame = event.target.closest("[data-photo-frame]");
+                if (frame && !frame.contains(event.relatedTarget)) {
+                    frame.classList.remove("drag-over");
+                }
+            });
+
+            elements.photoGrid.addEventListener("drop", function (event) {
+                const frame = event.target.closest("[data-photo-frame]");
+                if (!frame) {
+                    return;
+                }
+
+                event.preventDefault();
+                frame.classList.remove("drag-over");
+                const file = event.dataTransfer.files[0];
+
+                if (file) {
+                    setImageFromFile(Number(frame.dataset.photoFrame), file);
+                }
+            });
+
+            elements.batchImageInput.addEventListener("change", function () {
+                const files = Array.from(elements.batchImageInput.files || []);
+
+                if (files.length === 0) {
+                    return;
+                }
+
+                if (files.length > IMAGE_COUNT) {
+                    showToast("เลือกได้สูงสุด 4 ภาพ โดยระบบจะใช้ 4 ภาพแรก");
+                }
+
+                files.slice(0, IMAGE_COUNT).forEach(function (file, index) {
+                    setImageFromFile(index, file);
+                });
+
+                elements.batchImageInput.value = "";
+            });
+
+            document.getElementById("printBtn").addEventListener("click", function () {
+                const count = state.images.filter(Boolean).length;
+                if (count < IMAGE_COUNT) {
+                    const proceed = confirm(`ตอนนี้มีรูป ${count} จาก 4 ภาพ ต้องการพิมพ์ต่อหรือไม่?`);
+                    if (!proceed) {
+                        return;
+                    }
+                }
+
+                window.print();
+            });
+
+            document.getElementById("saveProjectBtn").addEventListener("click", saveProject);
+            document.getElementById("loadProjectBtn").addEventListener("click", function () {
+                elements.projectFileInput.click();
+            });
+            document.getElementById("resetBtn").addEventListener("click", resetProject);
+
+            elements.projectFileInput.addEventListener("change", async function () {
+                if (elements.projectFileInput.files[0]) {
+                    await loadProject(elements.projectFileInput.files[0]);
+                }
+                elements.projectFileInput.value = "";
+            });
+
+            window.addEventListener("resize", updatePageScale);
+
+            if (typeof ResizeObserver !== "undefined") {
+                const observer = new ResizeObserver(updatePageScale);
+                observer.observe(elements.previewArea);
+            }
+
+            window.addEventListener("beforeunload", function () {
+                for (let index = 0; index < IMAGE_COUNT; index++) {
+                    releaseImage(index);
+                }
+            });
+        }
+
+        function init() {
+            createImageControls();
+            bindEvents();
+            applyPaperSettings();
+            updatePageScale();
+        }
+
+        init();
+    </script>
+</body>
+</html>
