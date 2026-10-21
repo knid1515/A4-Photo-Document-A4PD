@@ -1436,6 +1436,123 @@
                 max-height: none !important;
             }
         }
+
+        /* ===== คู่มือในโปรแกรม: แสดงแบบหน้าต่างเต็มพื้นที่ พร้อมสารบัญและค้นหา ===== */
+        .manual-overlay[hidden], .manual-chapter[hidden], .manual-nav-link[hidden],
+        .manual-search-status[hidden] { display: none !important; }
+        .manual-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background: rgba(10, 29, 52, .75);
+            backdrop-filter: blur(5px);
+        }
+        .manual-window {
+            display: flex;
+            flex-direction: column;
+            width: min(1150px, 100%);
+            height: min(94dvh, 980px);
+            min-height: 360px;
+            min-width: 0;
+            border-radius: 17px;
+            background: #fff;
+            box-shadow: 0 25px 90px rgba(0,0,0,.35);
+            overflow: hidden;
+        }
+        .manual-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 20px 23px;
+            background: linear-gradient(120deg, #12385f, #136e85);
+            color: white;
+        }
+        .manual-heading { display: flex; align-items: center; gap: 16px; min-width: 0; }
+        .manual-book-icon { flex: 0 0 52px; display: grid; place-items: center; border-radius: 13px; background: rgba(255,255,255,.14); width: 52px; height: 52px; font-size: 30px; }
+        .manual-eyebrow { margin: 0 0 3px; letter-spacing: .7px; font-size: 12px; color: #dcecf8; font-weight: 700; }
+        .manual-header h2 { font-size: clamp(20px, 2vw, 27px); margin: 0; line-height: 1.45; }
+        .manual-header p:last-child { margin: 4px 0 0; font-size: 15px; color: #e0edf8; }
+        .manual-close { display: flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 8px; border: 1px solid rgba(255,255,255,.6); border-radius: 10px; background: rgba(255,255,255,.12); color: white; padding: 10px 15px; min-height: 46px; font-size: 16px; font-weight: 700; }
+        .manual-close:hover { background: rgba(255,255,255,.26); }
+        .manual-searchbar { display: flex; align-items: center; gap: 11px; background: #f4f8fc; border-bottom: 1px solid #dce5ee; padding: 12px 22px; }
+        .manual-searchbar label { font-size: 15px; font-weight: 700; color: #173d63; flex: 0 0 auto; }
+        .manual-searchbar input { min-width: 0; width: 100%; flex: 1; padding: 10px 13px; min-height: 44px; font: inherit; font-size: 16px; border: 1px solid #b5c6d7; border-radius: 9px; color: #172f4b; background: white; }
+        .manual-search-clear { min-height: 44px; padding: 8px 12px; border: 1px solid #b5c6d7; border-radius: 9px; color: #173d63; background: white; font-size: 14px; font-weight: 600; white-space: nowrap; }
+        .manual-grid { display: grid; grid-template-columns: 265px minmax(0, 1fr); flex: 1; min-height: 0; }
+        .manual-nav { overflow: auto; background: #f0f5fa; padding: 16px 11px; border-right: 1px solid #dbe5ef; }
+        .manual-nav-caption { color: #546e87; margin: 0 9px 12px; font-size: 14px; font-weight: 700; }
+        .manual-nav-link { display: flex; align-items: flex-start; text-align: left; gap: 10px; width: 100%; margin: 2px 0; padding: 10px; border: 0; border-radius: 9px; color: #193654; background: transparent; font-size: 15px; line-height: 1.5; }
+        .manual-nav-link:hover, .manual-nav-link:focus-visible { background: #d9eaf7; }
+        .manual-nav-link.active { background: #d9edf2; color: #086473; font-weight: 700; }
+        .manual-nav-num { flex: 0 0 27px; color: #43748e; font-weight: 700; font-variant-numeric: tabular-nums; }
+        .manual-content { overflow-y: auto; overscroll-behavior: contain; scroll-behavior: smooth; padding: 23px clamp(18px, 3vw, 38px) 34px; color: #25364a; font-size: 17px; line-height: 1.8; }
+        .manual-intro { padding: 21px; border-radius: 13px; background: linear-gradient(115deg, #eff7ff, #effbf8); border: 1px solid #cbddeb; }
+        .manual-intro h3 { margin: 0 0 7px; font-size: 22px; color: #17416d; }
+        .manual-intro p { margin: 0 0 12px; }
+        .manual-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+        .manual-chips span { background: white; border: 1px solid #c8e3e8; color: #176d77; padding: 3px 10px; border-radius: 40px; font-size: 13px; font-weight: 700; }
+        .manual-chapter { padding: 23px 0; border-bottom: 1px solid #dce4ee; scroll-margin-top: 15px; }
+        .manual-chapter h3 { display: flex; align-items: flex-start; gap: 11px; color: #153c64; margin: 0 0 12px; font-size: 21px; line-height: 1.5; }
+        .manual-chapter h3 span { flex: 0 0 auto; display: grid; place-items: center; min-width: 36px; height: 36px; background: #e3f1f7; border-radius: 9px; color: #096878; font-size: 15px; }
+        .manual-chapter p { margin: 0 0 9px; }
+        .manual-chapter ol { margin: 0; padding-left: 29px; }
+        .manual-chapter li { margin: 0 0 9px; padding-left: 4px; }
+        .manual-chapter li::marker { color: #0c7a87; font-weight: 800; }
+        .manual-chapter dl { margin: 0; }
+        .manual-chapter dt { margin-top: 16px; font-weight: 700; color: #194267; }
+        .manual-chapter dd { margin: 3px 0 0 0; padding: 0 0 9px 13px; border-left: 3px solid #b5dae3; }
+        .manual-note { margin-top: 15px; padding: 14px 16px; background: #eaf7f7; color: #194956; border-left: 4px solid #178e98; border-radius: 8px; font-size: 16px; line-height: 1.7; }
+        .manual-warning { background: #fff7e6; border-left-color: #e6a23c; color: #60421b; }
+        .manual-layout-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 9px; margin-top: 14px; }
+        .manual-layout-grid > div { text-align: center; border: 1px solid #c7d9e7; border-radius: 9px; padding: 12px 4px; background: #f7fafe; }
+        .manual-layout-grid strong { display: block; font-size: 16px; color: #21486a; }
+        .manual-layout-grid span { display: block; white-space: nowrap; font-size: 30px; line-height: 1.05; padding: 12px 0; color: #0c7890; letter-spacing: 3px; }
+        .manual-layout-grid small { display: block; font-size: 13px; color: #59718a; }
+        .manual-quick-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .manual-quick-actions button, .manual-action-primary { min-height: 44px; padding: 9px 16px; border: 0; border-radius: 9px; font-size: 15px; font-weight: 700; color: white; background: #087e86; }
+        .manual-quick-actions button:hover, .manual-action-primary:hover { background: #09666b; }
+        .manual-search-status { border: 1px solid #dae4ee; border-radius: 9px; padding: 12px 16px; background: #f8fafc; color: #35506d; }
+        .manual-end { text-align: center; padding: 28px 10px 8px; }
+        .manual-end p { margin-top: 0; font-weight: 700; }
+        .manual-footer { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #dce5ee; background: #f7fafd; padding: 12px 22px; }
+        .manual-footer span { font-size: 13px; color: #64748b; }
+        .manual-header button:focus-visible, .manual-window button:focus-visible, .manual-window input:focus-visible { outline: 3px solid #ffba43; outline-offset: 2px; }
+        @media (max-width: 800px) {
+            .manual-grid { grid-template-columns: 1fr; }
+            .manual-nav { display: flex; align-items: center; gap: 5px; overflow-x: auto; overflow-y: hidden; padding: 10px; white-space: nowrap; border-right: 0; border-bottom: 1px solid #dce5ee; }
+            .manual-nav-caption { display: none; }
+            .manual-nav-link { flex: 0 0 auto; width: auto; align-items: center; padding: 9px 10px; font-size: 14px; }
+            .manual-nav-num { flex: 0 0 auto; }
+            .manual-header { padding: 13px 15px; }
+            .manual-book-icon { display: none; }
+            .manual-header p:last-child { font-size: 13px; }
+            .manual-searchbar { flex-wrap: wrap; gap: 7px; padding: 10px 14px; }
+            .manual-searchbar label { flex: 1 1 100%; }
+            .manual-content { padding: 17px; font-size: 16px; }
+            .manual-footer { padding: 10px 14px; }
+            .manual-footer span { display: none; }
+            .manual-footer button { width: 100%; }
+        }
+        @media (max-width: 560px) {
+            .manual-overlay { padding: 0; }
+            .manual-window { height: 100dvh; min-height: 0; border-radius: 0; }
+            .manual-header h2 { font-size: 19px; }
+            .manual-eyebrow { font-size: 10px; }
+            .manual-close { padding: 8px; min-width: 42px; }
+            .manual-close span { display: none; }
+            .manual-layout-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+            .manual-intro { padding: 14px; }
+            .manual-intro h3 { font-size: 19px; }
+            .manual-chapter h3 { font-size: 19px; }
+            .manual-searchbar input { flex: 1 1 200px; }
+        }
+        @media print { .manual-overlay { display: none !important; } }
+
     </style>
 </head>
 <body id="top">
@@ -1455,6 +1572,9 @@
                 <span class="text-size-value" id="uiFontSizeValue" aria-live="polite">ปกติ</span>
                 <button type="button" class="font-step-btn" id="uiFontIncreaseBtn" aria-label="เพิ่มขนาดตัวอักษร">A+</button>
             </div>
+            <button type="button" class="btn btn-outline-light manual-header-btn" id="manualOpenBtn" aria-haspopup="dialog" aria-controls="manualDialog">
+                📖 คู่มือการใช้งาน
+            </button>
             <button type="button" class="btn btn-outline-light" id="saveProjectBtn">
                 💾 บันทึกงาน
             </button>
@@ -1697,11 +1817,107 @@
                 <p class="footer-credit">© <span id="footerYear">2569</span> A4PD • พัฒนาโดย นายวัฒนชาต ทัศนศร</p>
             </div>
             <nav class="footer-links" aria-label="ลิงก์ท้ายหน้า">
+                <button type="button" class="footer-link manual-footer-btn" id="manualFooterBtn" aria-haspopup="dialog" aria-controls="manualDialog">📖 คู่มือการใช้งาน</button>
                 <a class="footer-link" href="https://krunidblogger.blogspot.com/" target="_blank" rel="noopener noreferrer">📝 ติดตามผลงาน ↗</a>
                 <a class="footer-link" href="#top">↑ กลับด้านบน</a>
             </nav>
         </div>
     </footer>
+
+
+    <!-- คู่มือการใช้งานในโปรแกรม: ไม่ต้องโหลดไฟล์หรือบริการภายนอก -->
+    <div class="manual-overlay" id="manualDialog" role="dialog" aria-modal="true"
+         aria-labelledby="manualTitle" aria-describedby="manualSummary" hidden>
+        <div class="manual-window" role="document">
+            <header class="manual-header">
+                <div class="manual-heading">
+                    <div class="manual-book-icon" aria-hidden="true">📖</div>
+                    <div>
+                        <p class="manual-eyebrow">A4 PHOTO DOCUMENT · A4PD</p>
+                        <h2 id="manualTitle">คู่มือการใช้งานโปรแกรมแบบละเอียด</h2>
+                        <p id="manualSummary">อธิบายทีละขั้นตอน ตั้งแต่เพิ่มรูปจนถึงพิมพ์หรือบันทึก PDF</p>
+                    </div>
+                </div>
+                <button type="button" class="manual-close" id="manualCloseBtn" aria-label="ปิดคู่มือการใช้งาน">✕ <span>ปิดคู่มือ</span></button>
+            </header>
+            <div class="manual-searchbar">
+                <label for="manualSearch">🔎 ค้นหาหัวข้อหรือขั้นตอนในคู่มือ</label>
+                <input id="manualSearch" type="search" placeholder="เช่น สำเนาบัตร / ตำแหน่ง / PDF / JSON / ขนาดตัวอักษร" autocomplete="off">
+                <button type="button" id="manualSearchClear" class="manual-search-clear" aria-label="ล้างคำค้นหา">ล้างคำค้น</button>
+            </div>
+            <div class="manual-grid">
+                <nav class="manual-nav" id="manualNav" aria-label="สารบัญคู่มือ">
+                    <p class="manual-nav-caption">สารบัญ · 16 หัวข้อ</p>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-start" aria-label="หัวข้อ 1 เริ่มต้นใช้งาน"><span class="manual-nav-num">01</span><span>เริ่มต้นใช้งาน</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-photo-count" aria-label="หัวข้อ 2 จัดรูปภาพ 1–4 ภาพ"><span class="manual-nav-num">02</span><span>จัดรูปภาพ 1–4 ภาพ</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-photo-add" aria-label="หัวข้อ 3 เพิ่ม แก้ไข และลบรูปภาพ"><span class="manual-nav-num">03</span><span>เพิ่ม แก้ไข และลบรูปภาพ</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-photo-style" aria-label="หัวข้อ 4 ปรับรูปแบบ ระยะขอบ และคำบรรยาย"><span class="manual-nav-num">04</span><span>ปรับรูปแบบ ระยะขอบ และคำบรรยาย</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-copy-id" aria-label="หัวข้อ 5 สำเนาบัตรประชาชน"><span class="manual-nav-num">05</span><span>สำเนาบัตรประชาชน</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-copy-house" aria-label="หัวข้อ 6 สำเนาทะเบียนบ้าน 2 ภาพ"><span class="manual-nav-num">06</span><span>สำเนาทะเบียนบ้าน 2 ภาพ</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-copy-full" aria-label="หัวข้อ 7 สำเนาเอกสารเต็ม A4"><span class="manual-nav-num">07</span><span>สำเนาเอกสารเต็ม A4</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-copy-sign" aria-label="หัวข้อ 8 ข้อความรับรองและลงลายมือชื่อ"><span class="manual-nav-num">08</span><span>ข้อความรับรองและลงลายมือชื่อ</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-copy-margin" aria-label="หัวข้อ 9 ระยะขอบและเริ่มสำเนาใหม่"><span class="manual-nav-num">09</span><span>ระยะขอบและเริ่มสำเนาใหม่</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-preview" aria-label="หัวข้อ 10 ตัวอย่าง A4 ซูม และขนาดตัวอักษร"><span class="manual-nav-num">10</span><span>ตัวอย่าง A4 ซูม และขนาดตัวอักษร</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-print" aria-label="หัวข้อ 11 พิมพ์บน A4 และบันทึก PDF"><span class="manual-nav-num">11</span><span>พิมพ์บน A4 และบันทึก PDF</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-json-save" aria-label="หัวข้อ 12 บันทึกไฟล์งาน JSON"><span class="manual-nav-num">12</span><span>บันทึกไฟล์งาน JSON</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-json-open" aria-label="หัวข้อ 13 เปิดไฟล์งานเดิมมาแก้ไข"><span class="manual-nav-num">13</span><span>เปิดไฟล์งานเดิมมาแก้ไข</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-reset" aria-label="หัวข้อ 14 ล้างข้อมูลและเริ่มงานใหม่"><span class="manual-nav-num">14</span><span>ล้างข้อมูลและเริ่มงานใหม่</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-problems" aria-label="หัวข้อ 15 ปัญหาที่พบบ่อยและวิธีแก้"><span class="manual-nav-num">15</span><span>ปัญหาที่พบบ่อยและวิธีแก้</span></button>
+                    <button type="button" class="manual-nav-link" data-manual-target="manual-privacy" aria-label="หัวข้อ 16 การเก็บรักษาข้อมูลสำคัญ"><span class="manual-nav-num">16</span><span>การเก็บรักษาข้อมูลสำคัญ</span></button>
+                </nav>
+                <div class="manual-content" id="manualContent" tabindex="0">
+                    <div class="manual-intro">
+                        <h3>ใช้งานครบทุกเมนูในไฟล์เดียว</h3>
+                        <p>คู่มือนี้สามารถเปิดอ่านได้โดยไม่ต้องออกจากหน้าโปรแกรม เลือกหัวข้อทางซ้ายหรือค้นหาคำที่สนใจ และกดปุ่มกลับไปทำงานได้ทันที</p>
+                        <div class="manual-chips"><span>จัดรูป 1–4 ภาพ</span><span>สำเนาเอกสาร 3 แบบ</span><span>รับรองสำเนา</span><span>บันทึก JSON / PDF</span></div>
+                    </div>
+                    <p class="manual-search-status" id="manualSearchStatus" role="status" aria-live="polite" hidden></p>
+                    <section class="manual-chapter" id="manual-start" data-manual-section tabindex="-1"><h3><span>01</span> เริ่มต้นใช้งาน</h3><p>โปรแกรม A4PD ทำเอกสาร A4 แนวตั้งได้ 2 ประเภท ได้แก่ <strong>เอกสารประกอบรูปภาพ</strong> (จัด 1–4 ภาพ) และ <strong>สำเนาเอกสาร</strong> (บัตรประชาชน ทะเบียนบ้าน หรือเอกสารเต็ม A4) โดยไม่ต้องติดตั้งโปรแกรมเพิ่มเติม</p>
+<ol><li>เปิดเว็บด้วย Google Chrome หรือ Microsoft Edge (โทรศัพท์มือถือก็ใช้งานได้)</li><li>แถบด้านซ้ายคือเครื่องมือกรอกข้อมูลและเลือกรูป ส่วนด้านขวาคือตัวอย่างหน้ากระดาษ A4</li><li>ที่หัวข้อ <strong>ประเภทเอกสาร</strong> ให้กด <strong>เอกสารประกอบรูปภาพ</strong> หรือ <strong>สำเนาเอกสาร</strong> ตามงานที่ต้องการ</li><li>ตั้งค่าและเพิ่มรูป แล้วตรวจสอบหน้าตัวอย่างก่อนกด <strong>🖨️ พิมพ์ / บันทึก PDF</strong></li></ol>
+<div class="manual-note">รูปที่ยังไม่ถูกเลือกจะแสดงคำว่า “คลิกเพื่อเพิ่มภาพ” ในตัวอย่าง โดยปุ่มข้อความดังกล่าวจะไม่ติดไปในหน้าพิมพ์ แนะนำให้เพิ่มภาพให้ครบก่อนพิมพ์</div>
+<div class="manual-quick-actions"><button type="button" data-manual-action="photo">เริ่มจัดภาพ</button><button type="button" data-manual-action="copy">เริ่มสำเนาเอกสาร</button></div></section>
+                    <section class="manual-chapter" id="manual-photo-count" data-manual-section tabindex="-1"><h3><span>02</span> จัดรูปภาพ 1–4 ภาพ</h3><p>ขั้นตอนนี้ใช้กับเมนู <strong>เอกสารประกอบรูปภาพ</strong> โดยทุกแบบจัดบนกระดาษ A4 แนวตั้ง</p>
+<ol><li>กด <strong>เอกสารประกอบรูปภาพ</strong> ในแถบประเภทเอกสาร</li><li>ที่ <strong>1. ข้อมูลหัวกระดาษ</strong> กรอก <strong>หัวเรื่องเอกสาร</strong> และ <strong>ข้อความใต้หัวเรื่อง</strong> ตามต้องการ</li><li>ที่ <strong>2. กำหนดจำนวนและเพิ่มรูปภาพ</strong> เลือกจำนวน 1, 2, 3 หรือ 4 จากเมนู</li><li>ตรวจดูตัวอย่าง A4 ทางขวา ซึ่งเปลี่ยนผังตามจำนวนที่เลือกทันที</li></ol>
+<div class="manual-layout-grid"><div><strong>1 ภาพ</strong><span>□</span><small>วางกึ่งกลางหน้า</small></div><div><strong>2 ภาพ</strong><span>□<br>□</span><small>บน / ล่าง</small></div><div><strong>3 ภาพ</strong><span>□<br>□□</span><small>บน 1 / ล่าง 2</small></div><div><strong>4 ภาพ</strong><span>□□<br>□□</span><small>2 คอลัมน์ × 2 แถว</small></div></div>
+<div class="manual-note">ถ้าเปลี่ยนจาก 4 ภาพเป็น 1–3 ภาพ ภาพในช่องที่ถูกซ่อนจะยังคงอยู่ในโครงการ และแสดงอีกเมื่อเปลี่ยนกลับเป็น 4 ภาพ</div></section>
+                    <section class="manual-chapter" id="manual-photo-add" data-manual-section tabindex="-1"><h3><span>03</span> เพิ่ม แก้ไข และลบรูปภาพ</h3><ol><li>กำหนดจำนวนภาพที่ต้องการก่อนเพิ่มภาพ</li><li>คลิก <strong>＋ เลือกรูปภาพพร้อมกัน</strong> เพื่อเลือกหลายภาพในครั้งเดียว หรือคลิกปุ่ม <strong>เลือกรูป</strong> ในแต่ละช่องเพื่อเลือกทีละภาพ</li><li>อีกวิธีคือคลิกกรอบภาพว่างบนกระดาษตัวอย่าง หรือบนคอมพิวเตอร์สามารถลากไฟล์รูปไปวางบนกรอบได้</li><li>รอจนเห็นรูปที่เลือกในช่องตัวอย่าง ตรวจสอบว่าตรงกับช่องหมายเลขใด</li><li>ต้องการเปลี่ยนภาพ ให้กดเลือกรูปช่องเดิมและเลือกไฟล์ใหม่; ต้องการลบเฉพาะช่องให้กด <strong>ลบรูป</strong> ของช่องนั้น</li><li>พิมพ์รายละเอียดในช่อง <strong>คำบรรยายใต้ภาพ</strong> ของแต่ละรูป เมื่อแก้ไขข้อความ ตัวอย่างจะอัปเดตทันที</li></ol>
+<div class="manual-note">เลือกรูปได้สูงสุดตามจำนวนที่กำหนดในเมนู หากเลือกมากกว่า ระบบจะใช้เฉพาะภาพแรกตามจำนวนที่เลือก ควรตรวจสอบลำดับภาพก่อนพิมพ์</div></section>
+                    <section class="manual-chapter" id="manual-photo-style" data-manual-section tabindex="-1"><h3><span>04</span> ปรับรูปแบบ ระยะขอบ และคำบรรยาย</h3><ol><li>ในหัวข้อ <strong>3. ตั้งค่ารูปแบบเอกสาร</strong> เลือกการแสดงรูป: <strong>แสดงภาพเต็ม ไม่ตัดส่วนใดออก</strong> หรือ <strong>เต็มกรอบ (อาจตัดขอบภาพ)</strong></li><li>เลือก <strong>ระยะขอบกระดาษ</strong> เป็น <strong>เว้นขอบซ้ายสำหรับเย็บ 18 มม.</strong> (เหมาะกับงานราชการ/เข้าเล่ม) หรือ <strong>ระยะขอบเท่ากัน 12 มม.</strong></li><li>ติ๊ก/เอาติ๊กออกจาก <strong>แสดงคำบรรยายใต้รูป</strong> เพื่อแสดงหรือซ่อนคำบรรยาย</li><li>ติ๊ก/เอาติ๊กออกจาก <strong>แสดงกรอบรอบรูป</strong> เพื่อควบคุมเส้นกรอบแต่ละภาพ</li><li>ดูตัวอย่างอีกครั้ง โดยเฉพาะรูปที่มีข้อความหรือขอบบัตร เพื่อแน่ใจว่าไม่มีส่วนสำคัญถูกตัด</li></ol>
+<div class="manual-note manual-warning"><strong>ข้อแนะนำ:</strong> หากเป็นภาพเอกสารหรือบัตรที่มีข้อมูลสำคัญ ให้เลือก “แสดงภาพเต็ม ไม่ตัดส่วนใดออก” ก่อนเสมอ</div></section>
+                    <section class="manual-chapter" id="manual-copy-id" data-manual-section tabindex="-1"><h3><span>05</span> สำเนาบัตรประชาชน</h3><ol><li>เลือก <strong>สำเนาเอกสาร</strong> จากเมนูประเภทเอกสาร</li><li>ที่หัวข้อ <strong>1. ประเภทสำเนาเอกสาร</strong> เลือก <strong>สำเนาบัตรประชาชน</strong></li><li>กด <strong>เลือกรูป</strong> ในช่อง <strong>ด้านหน้าบัตรประชาชน</strong> แล้วเลือกรูปด้านหน้า</li><li>ถ้าต้องการสำเนาทั้ง 2 ด้าน ให้เพิ่มรูปในช่อง <strong>ด้านหลังบัตร (ไม่บังคับ)</strong>; ถ้าใช้หน้าเดียวปล่อยช่องหลังว่างได้</li><li>หน้าตัวอย่างจะแสดงบัตรในขนาดมาตรฐานประมาณ <strong>85.6 × 54 มม.</strong> ตรวจสอบว่าข้อมูลบนบัตรชัดเจนและไม่ถูกตัด</li><li>กรอกข้อความรับรอง ชื่อ-นามสกุล และเลือกใช้ตำแหน่งหากต้องการ (ดูหัวข้อ “ข้อความรับรองสำเนา”)</li><li>ตรวจสอบแล้วกดพิมพ์หรือบันทึก PDF</li></ol><div class="manual-quick-actions"><button type="button" data-manual-action="id">เปิดแบบสำเนาบัตรประชาชน</button></div></section>
+                    <section class="manual-chapter" id="manual-copy-house" data-manual-section tabindex="-1"><h3><span>06</span> สำเนาทะเบียนบ้าน 2 ภาพ</h3><ol><li>เลือก <strong>สำเนาเอกสาร</strong> และเลือก <strong>สำเนาทะเบียนบ้าน — 2 ภาพ บน / ล่าง</strong></li><li>เพิ่มภาพทะเบียนบ้าน <strong>ภาพที่ 1</strong> สำหรับส่วนบนของกระดาษ</li><li>เพิ่มภาพทะเบียนบ้าน <strong>ภาพที่ 2</strong> สำหรับส่วนล่างของกระดาษ</li><li>ตรวจในตัวอย่างว่าภาพทั้งสองเรียงตามลำดับ บน–ล่าง และข้อมูลไม่ถูกตัด</li><li>กรอกข้อความ “ใช้สำหรับประกอบ” ตามวัตถุประสงค์ และกรอกชื่อ-นามสกุลของผู้รับรองสำเนา</li><li>เปิดสวิตช์ตำแหน่งหากต้องการ และตั้งระยะขอบเอกสาร</li><li>สั่งพิมพ์ A4 แนวตั้ง หรือเลือกบันทึก PDF</li></ol><div class="manual-quick-actions"><button type="button" data-manual-action="house">เปิดแบบสำเนาทะเบียนบ้าน</button></div></section>
+                    <section class="manual-chapter" id="manual-copy-full" data-manual-section tabindex="-1"><h3><span>07</span> สำเนาเอกสารเต็ม A4</h3><ol><li>เลือก <strong>สำเนาเอกสาร</strong> แล้วเลือก <strong>สำเนาเอกสารเต็ม A4 — 1 ภาพ</strong></li><li>กด <strong>เลือกรูป</strong> แล้วเลือกรูปถ่ายหรือไฟล์ภาพหน้าที่ต้องการสำเนา 1 ภาพ</li><li>ใน <strong>การวางภาพเอกสารเต็ม A4</strong> เลือกแบบใดแบบหนึ่ง: <strong>เว้นที่ด้านล่างสำหรับลงชื่อ (แนะนำ)</strong> หรือ <strong>ขยายภาพเต็มหน้า มีส่วนรับรองทับด้านล่าง</strong></li><li>หากเลือกแบบขยายเต็มหน้า ต้องตรวจสอบว่าพื้นที่ข้อความรับรองไม่บังข้อมูลสำคัญของเอกสาร</li><li>กรอกข้อความรับรอง ชื่อ-นามสกุล และตำแหน่งหากต้องการ</li><li>ดูตัวอย่างแล้วจึงพิมพ์เป็นกระดาษ A4 หรือบันทึก PDF</li></ol><div class="manual-note manual-warning"><strong>ระวัง:</strong> แบบที่มีส่วนรับรองทับบนภาพอาจบังข้อความต้นฉบับ แนะนำให้เลือก “เว้นที่ด้านล่างสำหรับลงชื่อ” หากเป็นเอกสารที่ต้องอ่านครบทั้งหน้า</div><div class="manual-quick-actions"><button type="button" data-manual-action="full">เปิดแบบสำเนาเอกสารเต็ม A4</button></div></section>
+                    <section class="manual-chapter" id="manual-copy-sign" data-manual-section tabindex="-1"><h3><span>08</span> ข้อความรับรองและลงลายมือชื่อ</h3><ol><li>ในโหมด <strong>สำเนาเอกสาร</strong> เลื่อนลงไปที่ <strong>2. ข้อความรับรองสำเนา</strong></li><li>ที่ช่อง <strong>ข้อความ “ใช้สำหรับประกอบ”</strong> พิมพ์วัตถุประสงค์ เช่น “ใช้สำหรับประกอบการสมัครงานเท่านั้น”</li><li>กรอก <strong>ชื่อ-นามสกุล</strong> ผู้รับรองในช่องเดียว เช่น “นางสาวตัวอย่าง ใจดี” (ไม่ต้องใส่วงเล็บเอง)</li><li>หากต้องการใส่ตำแหน่ง ให้ <strong>เปิด</strong> สวิตช์ <strong>ตำแหน่ง (ไม่บังคับ)</strong> แล้วกรอกข้อความตำแหน่ง เช่น “ครูชำนาญการพิเศษ”</li><li>หากไม่ต้องการแสดงตำแหน่ง ให้ <strong>ปิด</strong> สวิตช์ ระบบจะซ่อนข้อความในเอกสาร แม้เคยกรอกตำแหน่งไว้</li><li>ตรวจหน้าตัวอย่าง: มีข้อความวัตถุประสงค์, คำว่า <strong>“สำเนาถูกต้อง”</strong>, เส้นสำหรับเซ็นชื่อ, ข้อความ <strong>(ชื่อ-นามสกุล)</strong> และบรรทัดตำแหน่งเฉพาะเมื่อเปิดใช้งาน</li><li>หลังพิมพ์สามารถลงลายมือชื่อจริงบนเส้นได้ตามที่หน่วยงานกำหนด</li></ol>
+<div class="manual-note">โปรแกรมใส่ชื่อที่กรอกให้อยู่ในวงเล็บอัตโนมัติ และไม่ได้สร้างลายเซ็นดิจิทัลแทนผู้รับรอง</div></section>
+                    <section class="manual-chapter" id="manual-copy-margin" data-manual-section tabindex="-1"><h3><span>09</span> ระยะขอบและเริ่มสำเนาใหม่</h3><ol><li>เลือก <strong>ระยะขอบกระดาษ</strong> ในโหมดสำเนาเอกสาร: <strong>เว้นซ้าย 18 มม. สำหรับเย็บ</strong> หรือ <strong>ขอบซ้าย–ขวา 12 มม.</strong></li><li>ตรวจว่าข้อมูลสำคัญไม่ชิดขอบเกินไป และข้อความรับรองอยู่ในหน้าเดียวกัน</li><li>เมื่อจะทำเอกสารสำเนาชุดใหม่ ให้กด <strong>↺ ล้างข้อมูลสำเนาเอกสาร</strong> และยืนยันก่อนล้าง</li><li>การล้างข้อมูลสำเนาเป็นคนละคำสั่งกับการล้างข้อมูลในโหมดรูปภาพ</li></ol></section>
+                    <section class="manual-chapter" id="manual-preview" data-manual-section tabindex="-1"><h3><span>10</span> ตัวอย่าง A4 ซูม และขนาดตัวอักษร</h3><ol><li>หน้าตัวอย่างทางขวาแสดง A4 แนวตั้ง ขนาด <strong>210 × 297 มม.</strong> พร้อมอัปเดตตามการเปลี่ยนค่าด้านซ้าย</li><li>ใช้ปุ่ม <strong>−</strong> และ <strong>+</strong> เหนือตัวอย่างเพื่อย่อ/ขยาย; กด <strong>พอดีจอ</strong> เพื่อให้กระดาษพอดีกับพื้นที่แสดง</li><li>ใช้ปุ่ม <strong>A−</strong> หรือ <strong>A+</strong> บนแถบด้านบนเพื่อปรับขนาดตัวอักษร <strong>ของหน้าจอโปรแกรม</strong> ให้อ่านง่าย</li><li>หากใช้โทรศัพท์มือถือ สามารถเลื่อนดูส่วนกรอกและส่วนแสดงตัวอย่างตามลำดับ</li><li>การซูมและปรับขนาดตัวอักษรบนหน้าจอ <strong>ไม่เปลี่ยนขนาดเอกสาร A4 ที่พิมพ์</strong></li></ol></section>
+                    <section class="manual-chapter" id="manual-print" data-manual-section tabindex="-1"><h3><span>11</span> พิมพ์บน A4 และบันทึก PDF</h3><ol><li>เลือกรูปให้ครบและตรวจตัวอย่างก่อนสั่งพิมพ์ หากรูปยังไม่ครบ ระบบจะถามก่อนว่าต้องการพิมพ์ต่อหรือไม่</li><li>กดปุ่ม <strong>🖨️ พิมพ์ / บันทึก PDF</strong> บนแถบด้านบนของโปรแกรม</li><li>เมื่อหน้าต่างพิมพ์เปิดขึ้น ให้เลือก <strong>กระดาษ A4</strong> และ <strong>แนวตั้ง (Portrait)</strong></li><li>ตั้งค่า <strong>Margins / ระยะขอบ = None / ไม่มี</strong> หากเบราว์เซอร์ให้ตั้งค่า และตั้ง <strong>Scale / มาตราส่วน = 100%</strong> หรือค่ามาตรฐานที่ไม่ย่อ/ขยายหน้า</li><li>ปิดตัวเลือก <strong>Headers and footers / หัวกระดาษและท้ายกระดาษ</strong> เพื่อไม่ให้แสดง URL วันที่หรือเลขหน้า</li><li>ดูภาพตัวอย่างในหน้าต่างพิมพ์ ควรเห็น <strong>กระดาษ A4 จำนวน 1 หน้า</strong> และเนื้อหาไม่ถูกตัด</li><li>ต้องการพิมพ์กระดาษ: เลือกเครื่องพิมพ์แล้วกด <strong>Print</strong>; ต้องการไฟล์: เลือก <strong>Save as PDF / บันทึกเป็น PDF</strong> แล้วเลือกตำแหน่งจัดเก็บ</li></ol><div class="manual-note manual-warning"><strong>ถ้ามี 2 หน้า:</strong> ตรวจสอบว่าปิดส่วนหัว/ท้าย และตั้งขนาด A4 แนวตั้ง ระยะขอบไม่มี รวมถึงปิดการปรับสเกลอัตโนมัติ หากยังไม่พอดีลองพิมพ์ผ่าน Chrome หรือ Edge</div></section>
+                    <section class="manual-chapter" id="manual-json-save" data-manual-section tabindex="-1"><h3><span>12</span> บันทึกไฟล์งาน JSON</h3><ol><li>เมื่อเลือกรูปและตั้งค่าเอกสารเรียบร้อย ให้กด <strong>💾 บันทึกงาน</strong> บนแถบด้านบน</li><li>เบราว์เซอร์จะดาวน์โหลดไฟล์งานนามสกุล <strong>.json</strong> ซึ่งเก็บข้อมูลการจัดหน้า รูปภาพ คำบรรยาย และค่าที่กำหนดในงานนั้น</li><li>เก็บไฟล์ JSON ไว้ในโฟลเดอร์ที่หาเจอได้ง่าย เช่น “เอกสารประกอบ” และตั้งชื่อเพื่อแยกงาน</li><li>หากต้องการไฟล์ที่ใช้ส่งหรือพิมพ์ ให้ใช้ปุ่ม <strong>พิมพ์ / บันทึก PDF</strong> แยกต่างหาก เพราะ JSON เป็นไฟล์สำหรับกลับมาแก้ไข ไม่ใช่รูปแบบเอกสารสำเร็จรูป</li></ol><div class="manual-note">ไฟล์ JSON ที่มีรูปภาพอาจมีขนาดใหญ่ และอาจเก็บข้อมูลส่วนบุคคลที่ปรากฏในรูปด้วย ควรจัดเก็บให้ปลอดภัย</div></section>
+                    <section class="manual-chapter" id="manual-json-open" data-manual-section tabindex="-1"><h3><span>13</span> เปิดไฟล์งานเดิมมาแก้ไข</h3><ol><li>เปิดเว็บไซต์โปรแกรม A4PD</li><li>กด <strong>📂 เปิดงานเดิม</strong> ที่แถบด้านบน</li><li>เลือกไฟล์ <strong>.json</strong> ที่เคยบันทึกด้วยโปรแกรมนี้</li><li>รอระบบเปิดรูปและคืนค่าต่าง ๆ แล้วตรวจสอบประเภทเอกสาร จำนวนภาพ คำบรรยาย ข้อความรับรอง และสวิตช์ตำแหน่ง</li><li>แก้ไขข้อมูลที่ต้องการ จากนั้นกด <strong>บันทึกงาน</strong> เพื่อดาวน์โหลด JSON ฉบับใหม่ หรือกด <strong>พิมพ์ / บันทึก PDF</strong> เพื่อทำเอกสารสำเร็จรูป</li></ol><div class="manual-note">รองรับไฟล์งาน A4PD รุ่นเดิมที่ถูกต้อง หากไฟล์เสียหายหรือไม่ใช่ JSON ของโปรแกรม อาจไม่สามารถเปิดได้</div></section>
+                    <section class="manual-chapter" id="manual-reset" data-manual-section tabindex="-1"><h3><span>14</span> ล้างข้อมูลและเริ่มงานใหม่</h3><ol><li>ถ้าทำงานประเภท <strong>เอกสารประกอบรูปภาพ</strong> ให้ไปที่ <strong>3. ตั้งค่ารูปแบบเอกสาร</strong> แล้วกด <strong>↺ ล้างข้อมูลเริ่มใหม่</strong></li><li>ถ้าทำงานประเภท <strong>สำเนาเอกสาร</strong> ให้เลื่อนลงส่วน <strong>2. ข้อความรับรองสำเนา</strong> แล้วกด <strong>↺ ล้างข้อมูลสำเนาเอกสาร</strong></li><li>อ่านกล่องยืนยันและกดตกลงเฉพาะเมื่อแน่ใจ เพราะข้อมูลในโหมดนั้นจะถูกล้าง</li><li>หากยังต้องใช้ข้อมูลเก่า แนะนำให้กด <strong>บันทึกงาน</strong> ก่อนล้างข้อมูล</li></ol></section>
+                    <section class="manual-chapter" id="manual-problems" data-manual-section tabindex="-1"><h3><span>15</span> ปัญหาที่พบบ่อยและวิธีแก้</h3><dl>
+<dt>รูปภาพไม่ขึ้นหลังเลือกไฟล์</dt><dd>ตรวจสอบว่าเป็นไฟล์ภาพที่เบราว์เซอร์รองรับ เช่น JPG/PNG/WebP และลองเลือกรูปใหม่ หากขนาดไฟล์ใหญ่มากให้ย่อรูปก่อน</dd>
+<dt>ตัวอย่างมีช่องว่างหรือแสดงจำนวนภาพไม่ครบ</dt><dd>ตรวจดูจำนวนภาพที่เลือกและช่องที่ยังขึ้นว่า “ยังไม่มีภาพ” หรือ “คลิกเพื่อเพิ่มภาพ” แล้วเพิ่มไฟล์ให้ครบ</dd>
+<dt>ภาพเอกสารถูกตัดขอบ</dt><dd>สำหรับโหมดจัดรูปภาพให้เลือก “แสดงภาพเต็ม ไม่ตัดส่วนใดออก” ส่วนแบบสำเนาเต็ม A4 ให้ตรวจตัวเลือกเว้นพื้นที่ลงชื่อ</dd>
+<dt>ข้อความตำแหน่งไม่ปรากฏในเอกสาร</dt><dd>เปิดสวิตช์ “ตำแหน่ง (ไม่บังคับ)” และกรอกข้อความในช่องตำแหน่ง ข้อความจะปรากฏใต้ (ชื่อ-นามสกุล)</dd>
+<dt>หน้าพิมพ์ไม่ใช่ A4 หรือมี 2 หน้า</dt><dd>เลือก A4 แนวตั้ง ปิดหัว/ท้ายกระดาษ และใช้ระยะขอบไม่มี ตรวจภาพตัวอย่างก่อนกดพิมพ์</dd>
+<dt>ปุ่มบันทึก PDF อยู่ตรงไหน</dt><dd>กด “🖨️ พิมพ์ / บันทึก PDF” แล้วเลือกเครื่องพิมพ์เป็น “Save as PDF” ในหน้าต่างพิมพ์ของเบราว์เซอร์</dd>
+<dt>เปิดงานเดิมแล้วไม่พบข้อมูล</dt><dd>ต้องเลือกไฟล์งานนามสกุล .json ที่เคยบันทึกจาก A4PD ไม่ใช่ไฟล์ PDF; สำหรับ PDF ให้เปิดอ่านในโปรแกรมอ่าน PDF ตามปกติ</dd>
+<dt>ตัวอักษรบนหน้าจอยังเล็ก</dt><dd>กด A+ บนแถบด้านบนเพื่อเพิ่มขนาดตัวอักษรของหน้าจอ โดยไม่เปลี่ยนการพิมพ์เอกสาร</dd>
+</dl></section>
+                    <section class="manual-chapter" id="manual-privacy" data-manual-section tabindex="-1"><h3><span>16</span> การเก็บรักษาข้อมูลสำคัญ</h3><ol><li>รูปภาพถูกประมวลผลในเบราว์เซอร์บนอุปกรณ์ขณะใช้งาน ไม่ต้องสร้างบัญชีเข้าใช้โปรแกรม</li><li>หากเป็นสำเนาบัตรประชาชน ทะเบียนบ้าน หรือเอกสารที่มีข้อมูลส่วนตัว ให้ระมัดระวังการเปิดเผยข้อมูลในภาพ</li><li>ไฟล์ PDF และ JSON ที่บันทึกลงเครื่องอาจมีข้อมูลส่วนบุคคล ควรจัดเก็บในพื้นที่ที่มีสิทธิ์เข้าถึงเหมาะสม</li><li>ไม่ควรอัปโหลดเอกสารจริงที่มีข้อมูลส่วนบุคคลขึ้น GitHub Pages, Blogger หรือพื้นที่สาธารณะเพื่อใช้เป็นภาพตัวอย่าง</li><li>หลังใช้คอมพิวเตอร์สาธารณะ ควรตรวจสอบไฟล์ที่ดาวน์โหลดไว้และลบไฟล์ข้อมูลส่วนบุคคลตามความเหมาะสม</li></ol></section>
+                    <div class="manual-end">
+                        <p>อ่านครบแล้ว สามารถกลับไปใช้งานโปรแกรมได้ทันที</p>
+                        <button type="button" id="manualEndCloseBtn" class="manual-action-primary">✓ กลับไปหน้าโปรแกรม</button>
+                    </div>
+                </div>
+            </div>
+            <footer class="manual-footer">
+                <span>คู่มือภาษาไทย • ใช้งานในเครื่องได้โดยไม่ต้องดาวน์โหลดคู่มือเพิ่มเติม</span>
+                <button type="button" class="manual-action-primary" id="manualBottomCloseBtn">กลับไปใช้งานโปรแกรม →</button>
+            </footer>
+        </div>
+    </div>
 
     <input class="file-input" id="projectFileInput" type="file" accept=".json,application/json">
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -2416,6 +2632,140 @@
             showToast("เริ่มเอกสารใหม่แล้ว");
         }
 
+
+        // ===== คู่มือภาษาไทยในหน้าเดียว: เปิด/ปิด ค้นหา เลือกหัวข้อ และกลับไปทำงาน =====
+        const manualUI = {
+            dialog: document.getElementById("manualDialog"),
+            openButton: document.getElementById("manualOpenBtn"),
+            footerButton: document.getElementById("manualFooterBtn"),
+            closeButton: document.getElementById("manualCloseBtn"),
+            footerCloseButton: document.getElementById("manualBottomCloseBtn"),
+            endCloseButton: document.getElementById("manualEndCloseBtn"),
+            search: document.getElementById("manualSearch"),
+            clearSearch: document.getElementById("manualSearchClear"),
+            status: document.getElementById("manualSearchStatus"),
+            content: document.getElementById("manualContent"),
+            nav: document.getElementById("manualNav")
+        };
+        let manualPreviousFocus = null;
+        let manualPreviousOverflow = "";
+
+        function filterManual() {
+            const query = manualUI.search.value.trim().toLocaleLowerCase();
+            const sections = Array.from(manualUI.content.querySelectorAll("[data-manual-section]"));
+            let count = 0;
+            sections.forEach(function (section) {
+                const matches = !query || section.textContent.toLocaleLowerCase().includes(query);
+                section.hidden = !matches;
+                const navLink = manualUI.nav.querySelector(`[data-manual-target="${section.id}"]`);
+                if (navLink) navLink.hidden = !matches;
+                if (matches) count++;
+            });
+            manualUI.status.hidden = !query;
+            manualUI.status.textContent = !query ? "" : count
+                ? `พบหัวข้อที่เกี่ยวข้อง ${count} หัวข้อ คลิกหัวข้อจากสารบัญเพื่ออ่านรายละเอียด`
+                : "ไม่พบหัวข้อที่ตรงกับคำค้น ลองใช้คำอื่น เช่น PDF, รูปภาพ, ตำแหน่ง หรือ JSON";
+            manualUI.content.scrollTop = 0;
+        }
+
+        function openManual() {
+            if (!manualUI.dialog.hidden) return;
+            manualPreviousFocus = document.activeElement;
+            manualPreviousOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+            manualUI.dialog.hidden = false;
+            manualUI.search.value = "";
+            filterManual();
+            manualUI.nav.querySelectorAll(".manual-nav-link").forEach(function (btn) {
+                btn.classList.remove("active");
+            });
+            manualUI.content.scrollTop = 0;
+            manualUI.closeButton.focus();
+        }
+
+        function closeManual() {
+            if (manualUI.dialog.hidden) return;
+            manualUI.dialog.hidden = true;
+            document.body.style.overflow = manualPreviousOverflow;
+            if (manualPreviousFocus && typeof manualPreviousFocus.focus === "function") {
+                manualPreviousFocus.focus();
+            }
+        }
+
+        function bindManualEvents() {
+            manualUI.openButton.addEventListener("click", openManual);
+            manualUI.footerButton.addEventListener("click", openManual);
+            [manualUI.closeButton, manualUI.footerCloseButton, manualUI.endCloseButton].forEach(function (button) {
+                button.addEventListener("click", closeManual);
+            });
+            manualUI.search.addEventListener("input", filterManual);
+            manualUI.clearSearch.addEventListener("click", function () {
+                manualUI.search.value = "";
+                filterManual();
+                manualUI.search.focus();
+            });
+            manualUI.nav.addEventListener("click", function (event) {
+                const navButton = event.target.closest("[data-manual-target]");
+                if (!navButton) return;
+                const section = document.getElementById(navButton.dataset.manualTarget);
+                if (!section || section.hidden) return;
+                manualUI.nav.querySelectorAll(".manual-nav-link").forEach(function (button) {
+                    button.classList.toggle("active", button === navButton);
+                });
+                section.scrollIntoView({ behavior: "smooth", block: "start" });
+                section.focus({ preventScroll: true });
+            });
+            manualUI.content.addEventListener("click", function (event) {
+                const shortcut = event.target.closest("[data-manual-action]");
+                if (!shortcut) return;
+                const action = shortcut.dataset.manualAction;
+                if (action === "photo") {
+                    setDocumentMode("photo");
+                } else if (action === "copy") {
+                    setDocumentMode("copy");
+                } else if (["id", "house", "full"].includes(action)) {
+                    setDocumentMode("copy");
+                    setCopyType(action);
+                } else {
+                    return;
+                }
+                closeManual();
+                document.getElementById("modePanel").scrollIntoView({ behavior: "smooth", block: "start" });
+                (action === "photo" ? elements.layoutCountSelect : elements.copyTypeSelect).focus({ preventScroll: true });
+            });
+            manualUI.dialog.addEventListener("click", function (event) {
+                if (event.target === manualUI.dialog) closeManual();
+            });
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "F1") {
+                    event.preventDefault();
+                    openManual();
+                }
+                if (manualUI.dialog.hidden) return;
+                if (event.key === "Escape") {
+                    event.preventDefault();
+                    closeManual();
+                }
+                if (event.key === "Tab") {
+                    const focusable = Array.from(manualUI.dialog.querySelectorAll(
+                        'button:not([disabled]):not([hidden]), input:not([disabled]):not([hidden]), a[href], [tabindex="0"]'
+                    )).filter(function (element) {
+                        return !element.closest("[hidden]") && element.getClientRects().length > 0;
+                    });
+                    if (focusable.length === 0) return;
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+                    if (event.shiftKey && document.activeElement === first) {
+                        event.preventDefault();
+                        last.focus();
+                    } else if (!event.shiftKey && document.activeElement === last) {
+                        event.preventDefault();
+                        first.focus();
+                    }
+                }
+            });
+        }
+
         function bindEvents() {
             elements.uiFontDecreaseBtn.addEventListener("click", function () {
                 setUIFontStep(uiFontStep - 1);
@@ -2628,11 +2978,15 @@
             createImageControls();
             setSelectedCount(4, false);
             bindEvents();
+            bindManualEvents();
             setCopyType("id");
             syncCopyPositionOption();
             setDocumentMode("photo");
             applyPaperSettings();
             updatePageScale();
+            if (new URLSearchParams(window.location.search).get("manual") === "1") {
+                openManual();
+            }
         }
 
         init();
